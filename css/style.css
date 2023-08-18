@@ -159,6 +159,10 @@ body {
   margin-top:1rem;
 }
 
+.margin-left-auto {
+  margin-left: 20px;
+}
+
 a:link,
 a:visited {
   text-decoration: none;
