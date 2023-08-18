@@ -2,6 +2,19 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
+/* Hide Arrows From Input Number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -19,6 +32,7 @@ html {
   --blue: #1f3e59;
   --cappucino:#e9c1af;
   --white:rgb(234, 228, 228);
+  --gray:rgb(154, 154, 154);
 }
 
 
@@ -40,11 +54,13 @@ body {
   background-color: var(--cappucino, rgba(153, 117, 102, 0.544));
   padding:2rem 3rem 3rem 3rem;
   position: relative;
+  height: 100%;
 
 }
 
 .main-section {
- 
+ padding:3rem;
+ height: 100%;
 }
 
 /* GENERAL style */
@@ -113,6 +129,22 @@ body {
   font-size: 1.7rem;
 }
 
+.font-size--lg {
+  font-size: 2rem;
+}
+
+.right-align {
+  text-align: right;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.margin-bottom--sm {
+  margin-bottom:1rem;
+}
+
 .margin-bottom--md {
   margin-bottom:2.4rem;
 }
@@ -132,10 +164,6 @@ a:visited {
   color: var(--blue);
 }
 
-/* a:hover,
-a:active {
-
-} */
 
 
 
@@ -185,3 +213,45 @@ button {
 footer p {
   font-size:1.5rem;
 }
+
+
+/* MAIN SECTION */
+
+.main-section--info {
+
+}
+
+.main-section--info p{
+  text-transform: uppercase;
+  font-size: 1.8rem;
+}
+
+.main-section--container {
+  /* background-color: blue; */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-auto-rows: 250px;
+}
+
+.box {
+  position:relative;
+  width: 250px;
+  padding:1rem;
+  background-color: var(--blue);
+  color:var(--white);
+  border: 2px solid var(--gray);
+  box-shadow: 10px 5px 5px #e2e0e0;
+  justify-self:center;
+  align-self: center;
+}
+
+.book {
+  padding:1rem;
+}
+
+.num-pages {
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  color: var(--gray);
+}
+

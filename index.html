@@ -13,7 +13,7 @@
 
     <sidebar class="sidebar-section">
       <div class="sidebar-section--container">
-        <header class="box flex center--vert gap--md margin-bottom--lg">
+        <header class="flex center--vert gap--md margin-bottom--lg">
           <i class="fa-solid fa-book fa-5x"></i>
           <h1 class="heading-primary">Library</h1>
         </header>
@@ -28,8 +28,12 @@
               <span class="input-box--text font-size--md">Who is the author of the book?</span>
             </div>
             <div class="input-box">
-              <input type="text" />
+              <input type="number" />
               <span class="input-box--text font-size--md">How many pages are in the book?</span>
+            </div>
+            <div class="input-box">
+              <input type="number" />
+              <span class="input-box--text font-size--md">How many pages you readed?</span>
             </div>
             <div class="input-checkbox flex center--vert">
               <input type="checkbox" />
@@ -46,7 +50,32 @@
         </div>
     </sidebar>
 
-    <main class="main-section"></main>
+    <main class="main-section">
+      <div class="main-section--info flex center gap--lg margin-bottom--md">
+        <p>Books Read: <span id="readed-books-count">0</span></p>
+        <p>Books Unread: <span id="unreaded-books-count" >0</span></p>
+        <p>On my List: <span id="on-my-list">0</span></p>
+        <p>Total Books: <span id="total-books">0</span></p>
+      </div>
+      <section class="grid main-section--container gap--sm">
+
+        <div class="box">
+          <i class="fa-solid fa-pencil"></i>
+          <div class="book flex center flex--column gap--lg margin-top--sm margin-bottom--lg">
+            <p class="book-title font-size--lg bold">"Factfulness"</p>
+            <p class="book-author font-size--sm "><em>Hans Rosling</em></p>
+            <p class="status font-size--sm">Completed</p>
+          </div>
+          <p class="num-pages right-align">(341 pages)</p>
+        </div>
+
+        
+        
+
+        
+
+      </section>
+    </main>
   </div>
 </body>
 </html>
