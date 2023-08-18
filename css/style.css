@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html {
+  font-size: 62.5%;
+}
+
+
+:root {
+  --blue: #1f3e59;
+}
+
+
+body {
+  font-family:"Montserrat-Regular", Arial, Helvetica, sans-serif;
+  color:var(--blue,rgb(5, 5, 98));
+}
