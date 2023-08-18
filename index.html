@@ -5,9 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Library</title>
   <link rel="stylesheet" href="css/style.css">
+  <script defer src="https://kit.fontawesome.com/51148f5aa4.js" crossorigin="anonymous"></script>
   <script defer src="script.js"></script>
 </head>
 <body>
-  <h1>Library</h1>
+  <div class="container grid grid--2-cols">
+
+    <sidebar class="sidebar-section">
+      <div class="sidebar-section--container">
+        <header class="box flex center--vert gap--md margin-bottom--lg">
+          <i class="fa-solid fa-book fa-5x"></i>
+          <h1 class="heading-primary">Library</h1>
+        </header>
+
+          <form action="#" method="GET" class="flex flex--column gap--el">
+            <div class="input-box">
+              <input type="text" />
+              <span class="input-box--text font-size--md">What is title of the book?</span>
+            </div>
+            <div class="input-box">
+              <input type="text" />
+              <span class="input-box--text font-size--md">Who is the author of the book?</span>
+            </div>
+            <div class="input-box">
+              <input type="text" />
+              <span class="input-box--text font-size--md">How many pages are in the book?</span>
+            </div>
+            <div class="input-checkbox flex center--vert">
+              <input type="checkbox" />
+              <span class="font-size--md">I have already read this book</span>
+            </div>
+            <button class="font-size--md" type="submit">Add a NEW book</button>
+          </form>
+
+          <footer>
+            <p><span><i class="fa-solid fa-circle-info"></i></span>
+              Hover to read about this project</p>
+            <p class="margin-top--sm ">Crafted by <a href="">Gliga2002</a> | <a href="">Source</a></p>
+          </footer>
+        </div>
+    </sidebar>
+
+    <main class="main-section"></main>
+  </div>
 </body>
 </html>

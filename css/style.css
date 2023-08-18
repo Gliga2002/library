@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Marcellus+SC&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -11,11 +15,173 @@ html {
 
 
 :root {
+  --aliceblue: aliceblue;
   --blue: #1f3e59;
+  --cappucino:#e9c1af;
+  --white:rgb(234, 228, 228);
 }
 
 
 body {
-  font-family:"Montserrat-Regular", Arial, Helvetica, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color:var(--blue,rgb(5, 5, 98));
+  background-color: var(--aliceblue);
+}
+
+
+/* LAYOUT  */
+
+
+.container {
+  height: 100vh;
+}
+
+.sidebar-section {
+  background-color: var(--cappucino, rgba(153, 117, 102, 0.544));
+  padding:2rem 3rem 3rem 3rem;
+  position: relative;
+
+}
+
+.main-section {
+ 
+}
+
+/* GENERAL style */
+
+.grid {
+  display:grid;
+}
+
+.grid--2-cols {
+  grid-template-columns: 1.5fr 5fr;
+}
+
+.flex {
+  display:flex;
+}
+
+.flex--column {
+  flex-direction: column;
+}
+
+.center {
+  justify-content: center;
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.center--vert {
+  align-items: center;
+}
+
+.center--horiz {
+  justify-content: center;
+}
+
+.gap--sm {
+  gap:1rem;
+}
+
+.gap--md {
+  gap: 1.5rem;
+}
+
+.gap--lg {
+  gap:2rem;
+}
+
+.gap--el {
+  gap:4rem;
+}
+
+.heading-primary {
+  font-family: 'Marcellus SC', serif;
+  font-size: 5.5rem;
+  color: var(--blue);
+  text-align: center;
+}
+
+.font-size--sm {
+  font-size: 1.4rem;
+}
+
+.font-size--md {
+  font-size: 1.7rem;
+}
+
+.margin-bottom--md {
+  margin-bottom:2.4rem;
+}
+
+.margin-bottom--lg {
+  margin-bottom:3.2rem;
+}
+
+.margin-top--sm {
+  margin-top:1rem;
+}
+
+a:link,
+a:visited {
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--blue);
+}
+
+/* a:hover,
+a:active {
+
+} */
+
+
+
+/* SIDEBAR */
+
+footer {
+  position:absolute;
+  bottom:0;
+  padding: 0 0 30px 0;
+}
+
+.input-box {
+  position:relative;
+}
+
+input {
+  width:100%;
+  padding: 15px 0 5px 0;
+  border:none;
+  background-color: var(--cappucino);
+  border-bottom: 2px dotted var(--blue);
+  color:var(--blue);
+}
+
+input[type="checkbox"] {
+  width:1.8rem;
+  height: 1.8rem;
+  margin-right:5px;
+}
+
+button {
+  padding:1.8rem 2.2rem;
+  width:70%;
+  text-transform: uppercase;
+  /* letter-spacing: 0.2px; */
+  color:var(--white);
+  background-color: var(--blue);
+}
+
+
+.input-box--text {
+  position:absolute;
+  top:14px;
+  left:0;
+}
+
+footer p {
+  font-size:1.5rem;
 }
