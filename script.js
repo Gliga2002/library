@@ -21,7 +21,7 @@ const myLibrary = [];
 let readedBooksCount = 0;
 let unreadedBooksCount = 0;
 let onMyList = 0;
-let totalBooks = myLibrary.length;
+let totalBooks = 0;
 
 
 function Book(author, title, numPages, readPages = null, read = false) {
@@ -34,36 +34,36 @@ function Book(author, title, numPages, readPages = null, read = false) {
 
 
 inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputElement => {
-  console.log(inputElement);
-// Debounce function to delay execution until the user stops typing
-function debounce(func, delay) {
-  let timer;
-  return function(...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
-  };
-}
+    console.log(inputElement);
+  // Debounce function to delay execution until the user stops typing
+  function debounce(func, delay) {
+    let timer;
+    return function(...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
 
 
-function processInput() {
-  const inputValue = inputElement.value;
-  console.log("Input value:", inputValue);
-  // Perform your function's logic here
-  if(inputValue !== "") {
-        inputElement.closest('.input-box').classList.add('typing');
-      } else {
-        console.log('ovde')
-        inputElement.closest('.input-box').classList.remove('typing');
-      }
+  function processInput() {
+    const inputValue = inputElement.value;
+    console.log("Input value:", inputValue);
+    // Perform your function's logic here
+    if(inputValue !== "") {
+          inputElement.closest('.input-box').classList.add('typing');
+        } else {
+          console.log('ovde')
+          inputElement.closest('.input-box').classList.remove('typing');
+        }
 
-     
-}
+      
+  }
 
-const debouncedProcessInput = debounce(processInput, 200); // Delay of 300 milliseconds
+  const debouncedProcessInput = debounce(processInput, 200); // Delay of 300 milliseconds
 
-inputElement.addEventListener("input", debouncedProcessInput);
+  inputElement.addEventListener("input", debouncedProcessInput);
 
 })
 
@@ -88,9 +88,11 @@ sidebar.addEventListener('click', (e) => {
 
 });
 
+
 mainSection.addEventListener('click', (e) => {
   if(prevClickedBox)prevClickedBox.classList.remove('clicked');
 })
+
 
 checkbox.addEventListener('change', function(e) {
   if(this.checked) {
@@ -121,8 +123,9 @@ form.addEventListener('submit', function(e) {
     console.log(this.isReaded.checked);
   
     addBookToLibrary(userInput);
-    resetInputs();
 
+
+    resetInputs();
 
   }
   catch(err) {
@@ -134,11 +137,16 @@ form.addEventListener('submit', function(e) {
 
 function addBookToLibrary(inputs) {
   const newBook = new Book(inputs.author, inputs.title, inputs.numPages, inputs.readedPages, inputs.isReaded);
-  // console.log(newBook);
+
   myLibrary.push(newBook);
-  // console.log(myLibrary);
+
   displayBooks(myLibrary);
+
+  changeBooksInfo(newBook);
+  // Ovo ces da promenis kad budes stavi local storage
+  displayBooksInfo();
 }
+
 
 function displayBooks(booksArray) {
 
@@ -152,12 +160,13 @@ function displayBooks(booksArray) {
       <div class="completed">
         <p class="status font-size--sm">Completed</p>
       </div>`
-    } else if(+book.readPages === 0 && !book.isRead) {
+      //readPages da nema vrednost i da nije procitana
+    } else if(!book.readPages && !book.isRead) {
       status = `
       <div class="on-list">
         <p class="status font-size--sm">on my list!</p>
       </div>`
-    } else if(+book.readPages !== 0 && !book.isRead) {
+    } else if(book.readPages && !book.isRead) {
       // Dinamicki ga napravi
       status = `
       <div class="in-progress">
@@ -195,20 +204,35 @@ function resetInputs() {
   inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputEl => {
     console.log(inputEl);
     inputEl.closest('.input-box').classList.remove('typing')
-    
   }) 
+
   form.reset();
 
 }
 
+function changeBooksInfo(currBook) {
+
+  if(currBook.isRead || +currBook.numPages === +currBook.readPages) readedBooksCount++;
+
+  if(!currBook.isRead && currBook.readPages && +currBook.readPages !== +currBook.numPages) unreadedBooksCount++;
+  
+  if(!currBook.isRead && !currBook.readPages) onMyList++;
+
+  totalBooks = myLibrary.length;
+}
 
 
-// function checkIsTyping (input) {
-//   const inputValue = input.value.trim();
-//   if(inputValue !== "") {
-//     input.closest('.input-box').classList.add('num-typed');
-//   } else {
-//     input.closest('.input-box').classList.remove('num-typed');
-//   }
-// }
+
+function displayBooksInfo() {
+  readedBooksCountEl.textContent = readedBooksCount;
+  unreadedBooksCountEl.textContent = unreadedBooksCount
+  onMyListEl.textContent = onMyList;
+  totalBooksEl.textContent = totalBooks;
+}
+
+
+
+
+
+
 
