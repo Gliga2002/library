@@ -1,6 +1,7 @@
-const sidebar = document.querySelector('.sidebar-section--container');
+const sidebar = document.querySelector('.sidebar-section');
 const form = document.querySelector('form');
-const mainSection = document.querySelector('.main-section--container');
+const mainSectionContainer = document.querySelector('.main-section--container');
+const mainSection = document.querySelector('.main-section');
 
 const inputsEl = document.querySelectorAll('input');
 const inputNumberReadEl = document.querySelector("#readed-pages");
@@ -64,34 +65,6 @@ const debouncedProcessInput = debounce(processInput, 200); // Delay of 300 milli
 
 inputElement.addEventListener("input", debouncedProcessInput);
 
-  // const throttledProcessInput = throttle(processInput, 800); // Limit execution to once every 300 milliseconds
-  // inputElement.addEventListener("input", throttledProcessInput);
-
-  // function throttle(func, limit) {
-  //   let inThrottle;
-  //   return function (...args) {
-  //     if (!inThrottle) {
-  //       func.apply(this, args);
-  //       inThrottle = true;
-  //       setTimeout(() => {
-  //         inThrottle = false;
-  //       }, limit);
-  //     }
-  //   };
-  // }
-  
-  // function processInput() {
-  //   if(inputElement.isReaded) return;
-  //   const inputValue = inputElement.value;
-  //   if(inputValue !== "") {
-  //     inputElement.closest('.input-box').classList.add('typing');
-  //   } else {
-  //     console.log('ovde')
-  //     inputElement.closest('.input-box').classList.remove('typing');
-  //   }
-  //   console.log("Input value:", inputValue);
-  //   // Perform your function's logic here
-  // }
 })
 
 
@@ -114,6 +87,10 @@ sidebar.addEventListener('click', (e) => {
   prevClickedBox = inputBox;
 
 });
+
+mainSection.addEventListener('click', (e) => {
+  if(prevClickedBox)prevClickedBox.classList.remove('clicked');
+})
 
 checkbox.addEventListener('change', function(e) {
   if(this.checked) {
@@ -144,10 +121,9 @@ form.addEventListener('submit', function(e) {
     console.log(this.isReaded.checked);
   
     addBookToLibrary(userInput);
-    // form.reset();
-    // inputNumberArray.forEach((input) => {
-    //   input.classList.remove('num-typed');
-    // })
+    resetInputs();
+
+
   }
   catch(err) {
    alert(err);
@@ -211,9 +187,19 @@ function displayBooks(booksArray) {
   </div>`
   })
 
-  mainSection.innerHTML = html;
+  mainSectionContainer.innerHTML = html;
 }
 
+
+function resetInputs() {
+  inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputEl => {
+    console.log(inputEl);
+    inputEl.closest('.input-box').classList.remove('typing')
+    
+  }) 
+  form.reset();
+
+}
 
 
 
