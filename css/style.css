@@ -72,7 +72,7 @@ body {
 }
 
 .grid--2-cols {
-  grid-template-columns: 1.5fr 5fr;
+  grid-template-columns: 1.7fr 5fr;
 }
 
 .flex {
@@ -300,5 +300,28 @@ footer p {
 .on-list .status {
   margin-top: 1rem;
   color:var(--orange);
+}
+
+
+/* FORM LOGIC */
+
+span {
+  transition: all 0.3s;
+}
+
+
+/* num typed is for typing into number input to stay */
+
+input[type="text"]:valid + span,
+.clicked span,
+.num-typed span {
+  top:-20%;
+  font-size: 1.2rem;
+}
+
+
+input:focus {
+  outline: none;
+  border-bottom: 2px dotted var(--white);
 }
 
