@@ -163,6 +163,12 @@ body {
   margin-left: 20px;
 }
 
+.margin-left--sm {
+  margin-left: 1rem;
+}
+
+
+
 a:link,
 a:visited {
   text-decoration: none;
@@ -291,7 +297,6 @@ footer p {
 
 .fill {
   height:inherit;
-  width: 100%;
   background-color: green;
 }
 
@@ -318,7 +323,6 @@ input[type="text"]:valid + span,
   top:-20%;
   font-size: 1.2rem;
 }
-
 
 input:focus {
   outline: none;
