@@ -317,9 +317,9 @@ span {
 
 /* num typed is for typing into number input to stay */
 
-input[type="text"]:valid + span,
-.clicked span,
-.num-typed span {
+.typing span,
+.clicked span
+ {
   top:-20%;
   font-size: 1.2rem;
 }

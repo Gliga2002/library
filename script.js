@@ -2,7 +2,8 @@ const sidebar = document.querySelector('.sidebar-section--container');
 const form = document.querySelector('form');
 const mainSection = document.querySelector('.main-section--container');
 
-const inputNumbers = document.querySelectorAll('input[type="number"]');
+const inputsEl = document.querySelectorAll('input');
+const inputNumberReadEl = document.querySelector("#readed-pages");
 const checkbox = document.querySelector('input[type="checkbox"');
 
 const readedBooksCountEl = document.querySelector('#readed-books-count');
@@ -11,7 +12,7 @@ const onMyListEl = document.querySelector('#on-my-list');
 const totalBooksEl = document.querySelector('#total-books');
 
 
-const inputNumberArray = [...inputNumbers];
+const inputsArray = [...inputsEl];
 
 let prevClickedBox;
 
@@ -30,15 +31,67 @@ function Book(author, title, numPages, readPages = null, read = false) {
   this.isRead = read;
 }
 
-// function addBookToLibrary() {
-//   const newBook = new Book();
-//   myLibrary.push(newBook);
-// }
+
+inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputElement => {
+  console.log(inputElement);
+// Debounce function to delay execution until the user stops typing
+function debounce(func, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
 
 
-// for input number form because its not required, to stay span on top bcs i dont have way to check validation
-inputNumberArray.forEach((input) => {
-  input.addEventListener('keyup', checkIsTyping.bind(null,input))
+function processInput() {
+  const inputValue = inputElement.value;
+  console.log("Input value:", inputValue);
+  // Perform your function's logic here
+  if(inputValue !== "") {
+        inputElement.closest('.input-box').classList.add('typing');
+      } else {
+        console.log('ovde')
+        inputElement.closest('.input-box').classList.remove('typing');
+      }
+
+     
+}
+
+const debouncedProcessInput = debounce(processInput, 200); // Delay of 300 milliseconds
+
+inputElement.addEventListener("input", debouncedProcessInput);
+
+  // const throttledProcessInput = throttle(processInput, 800); // Limit execution to once every 300 milliseconds
+  // inputElement.addEventListener("input", throttledProcessInput);
+
+  // function throttle(func, limit) {
+  //   let inThrottle;
+  //   return function (...args) {
+  //     if (!inThrottle) {
+  //       func.apply(this, args);
+  //       inThrottle = true;
+  //       setTimeout(() => {
+  //         inThrottle = false;
+  //       }, limit);
+  //     }
+  //   };
+  // }
+  
+  // function processInput() {
+  //   if(inputElement.isReaded) return;
+  //   const inputValue = inputElement.value;
+  //   if(inputValue !== "") {
+  //     inputElement.closest('.input-box').classList.add('typing');
+  //   } else {
+  //     console.log('ovde')
+  //     inputElement.closest('.input-box').classList.remove('typing');
+  //   }
+  //   console.log("Input value:", inputValue);
+  //   // Perform your function's logic here
+  // }
 })
 
 
@@ -64,11 +117,10 @@ sidebar.addEventListener('click', (e) => {
 
 checkbox.addEventListener('change', function(e) {
   if(this.checked) {
-    inputNumberArray[1].value = "";
-    inputNumberArray[1].closest('.input-box').classList.add('hidden');
+    inputNumberReadEl.value = "";
+    inputNumberReadEl.closest('.input-box').classList.add('hidden');
   } else {
-    // inputNumbersArray[1].value = "";
-    inputNumberArray[1].closest('.input-box').classList.remove('hidden');
+    inputNumberReadEl.closest('.input-box').classList.remove('hidden');
   }
 })
 
@@ -165,12 +217,12 @@ function displayBooks(booksArray) {
 
 
 
-function checkIsTyping (input) {
-  const inputValue = input.value.trim();
-  if(inputValue !== "") {
-    input.closest('.input-box').classList.add('num-typed');
-  } else {
-    input.closest('.input-box').classList.remove('num-typed');
-  }
-}
+// function checkIsTyping (input) {
+//   const inputValue = input.value.trim();
+//   if(inputValue !== "") {
+//     input.closest('.input-box').classList.add('num-typed');
+//   } else {
+//     input.closest('.input-box').classList.remove('num-typed');
+//   }
+// }
 
