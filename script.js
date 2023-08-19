@@ -1,8 +1,11 @@
 const sidebar = document.querySelector('.sidebar-section--container');
+const form = document.querySelector('form');
 
-const inputNumber = document.querySelectorAll('input[type="number"]');
+const inputNumbers = document.querySelectorAll('input[type="number"]');
 
-const inputNumberArray = [...inputNumber];
+const checkbox = document.querySelector('input[type="checkbox"');
+
+const inputNumberArray = [...inputNumbers];
 
 let prevClickedBox;
 
@@ -17,13 +20,13 @@ inputNumberArray.forEach((input) => {
 sidebar.addEventListener('click', (e) => {
   const inputBox = e.target.closest('.input-box');
   if(!inputBox) {
-    // Porveri da li si kliknuo na input Box ako nisi kad kliknes bilo gde se ponisti stajling
+    
     if(prevClickedBox)prevClickedBox.classList.remove('clicked');
     return;
   };
-  // Ako si kliknuo na predhodni pa na drugi, izbrisi prethodni pre nego sto kliknes na drugi
+ 
   if(prevClickedBox) prevClickedBox.classList.remove('clicked');
-  // Dodaj drugom classlist clicked
+
   inputBox.classList.add('clicked');
 
   let inputEl = inputBox.firstElementChild;
@@ -31,12 +34,26 @@ sidebar.addEventListener('click', (e) => {
 
   prevClickedBox = inputBox;
 
+});
+
+checkbox.addEventListener('change', function(e) {
+  if(this.checked) {
+    inputNumberArray[1].closest('.input-box').classList.add('hidden');
+  } else {
+    inputNumberArray[1].closest('.input-box').classList.remove('hidden');
+  }
 })
+
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  console.log(this);
+})
+
 
 
 function checkIsTyping (input) {
   const inputValue = input.value.trim();
-  console.log(inputValue)
   if(inputValue !== "") {
     input.closest('.input-box').classList.add('num-typed');
   } else {
