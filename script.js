@@ -163,32 +163,9 @@ function displayBooks(booksArray) {
 
   let html = '';
   booksArray.forEach((book, index) => {
-    let status = '';
+    let status = setStatus(book);
 
-    console.log(+book.numPages === +book.readPages);
-    if(+book.numPages === +book.readPages || book.isRead) {
-      status = `
-      <div class="status-div completed">
-        <p class="status font-size--sm">Completed</p>
-      </div>`
-      //readPages da nema vrednost i da nije procitana
-    } else if(!book.readPages && !book.isRead) {
-      status = `
-      <div class="status-div on-list">
-        <p class="status font-size--sm">on my list!</p>
-      </div>`
-    } else if(book.readPages && !book.isRead) {
-      // Dinamicki ga napravi
-      status = `
-      <div class="status-div in-progress">
-        <p class="font-size--sm margin-bottom--sm">In progress...</p>
-        <div class="loading">
-          <div style="width:${(+book.readPages / +book.numPages) * 100}%" class="fill"></div>
-        </div>
-      </div>`
-    }
-
-
+   
     html += `
     <div class="box"  data-index="${index}">
       <div onclick="handleIconsClick(event)" class="icon-box flex space-between">
@@ -209,6 +186,8 @@ function displayBooks(booksArray) {
 
   mainSectionContainer.innerHTML = html;
 }
+
+
 
 
 updateForm.addEventListener('submit', function(e) {
@@ -274,6 +253,30 @@ btnDelete.addEventListener('click', (e) => {
 
 })
 
+function setStatus(book) {
+  if(+book.numPages === +book.readPages || book.isRead) {
+    return `
+    <div class="status-div completed">
+      <p class="status font-size--sm">Completed</p>
+    </div>`
+    //readPages da nema vrednost i da nije procitana
+  } else if(!book.readPages && !book.isRead) {
+    return `
+    <div class="status-div on-list">
+      <p class="status font-size--sm">on my list!</p>
+    </div>`
+  } else if(book.readPages && !book.isRead) {
+    // Dinamicki ga napravi
+    return `
+    <div class="status-div in-progress">
+      <p class="font-size--sm margin-bottom--sm">In progress...</p>
+      <div class="loading">
+        <div style="width:${(+book.readPages / +book.numPages) * 100}%" class="fill"></div>
+      </div>
+    </div>`
+  }
+}
+
 
 function resetInputs() {
   inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputEl => {
@@ -332,11 +335,34 @@ function handleIconsClick(e) {
         const box = e.target.closest('.box');
         const completedBook = myLibrary[box.getAttribute('data-index')];
 
+        if(completedBook.isRead) return;
+
         changeBooksInfo(completedBook, true);
 
         completedBook.isRead = true;
+        completedBook.readPages = completedBook.numPages;
 
-        displayBooks(myLibrary);
+        console.log(box.lastElementChild);
+        box.lastElementChild.textContent = `(${completedBook.numPages} | ${completedBook.numPages} pages)`;
+
+        const book = box.children[1];
+   
+        // remove current status
+        book.lastElementChild.style.display = "none";
+
+        
+
+        // Create a new DOMParser instance
+        const parser = new DOMParser();
+
+        // Parse the HTML string into a Document object
+        const doc = parser.parseFromString(setStatus(completedBook), 'text/html');
+
+        // Now you can work with the Document object as if it's a real HTML document
+        const divElement = doc.querySelector('.status-div');
+
+        book.appendChild(divElement);
+         // Output: Hello, world!
 
         changeBooksInfo(completedBook);
         displayBooksInfo();
