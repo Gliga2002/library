@@ -217,7 +217,6 @@ updateForm.addEventListener('submit', function(e) {
    const updatedBook = myLibrary[updateModal.dataset.index];
 
    changeBooksInfo(updatedBook, true);
-   displayBooksInfo();
 
    updatedBook.author = authorInputUpdateEl.value;
    updatedBook.title = titleInputUpdateEl.value;
@@ -329,6 +328,20 @@ function handleIconsClick(e) {
     
       if(e.target.closest('.fa-check-double')) {
         console.log('check-double');
+
+        const box = e.target.closest('.box');
+        const completedBook = myLibrary[box.getAttribute('data-index')];
+
+        changeBooksInfo(completedBook, true);
+
+        completedBook.isRead = true;
+
+        displayBooks(myLibrary);
+
+        changeBooksInfo(completedBook);
+        displayBooksInfo();
+
+        
       }
     
       if(e.target.closest('.fa-trash')) {
