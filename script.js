@@ -247,26 +247,23 @@ function changeBooksInfo(currBook, remove=false) {
 
   if(!remove) {
     console.log('DONT REMOVE')
-    if(currBook.isRead || +currBook.numPages === +currBook.readPages) readedBooksCount++;
-
-    if(!currBook.isRead && currBook.readPages && +currBook.readPages !== +currBook.numPages) unreadedBooksCount++;
-
-    if(!currBook.isRead && !currBook.readPages) onMyList++;
-
-    totalBooks = myLibrary.length;
+    checkBookStatus(currBook)
   } else {
     console.log('REMOVE');
-    if(currBook.isRead || +currBook.numPages === +currBook.readPages) readedBooksCount--;
-
-    if(!currBook.isRead && currBook.readPages && +currBook.readPages !== +currBook.numPages) unreadedBooksCount--;
-
-    if(!currBook.isRead && !currBook.readPages) onMyList--;
-
-    totalBooks = myLibrary.length;
+    checkBookStatus(currBook, true)
   }
   
 }
 
+function checkBookStatus(currBook, remove=false) {
+  if(currBook.isRead || +currBook.numPages === +currBook.readPages) remove ? readedBooksCount-- : readedBooksCount ++;
+
+    if(!currBook.isRead && currBook.readPages && +currBook.readPages !== +currBook.numPages) remove ? unreadedBooksCount-- : unreadedBooksCount++;
+
+    if(!currBook.isRead && !currBook.readPages) remove ? onMyList-- : onMyList++;
+
+    totalBooks = myLibrary.length;
+}
 
 
 function displayBooksInfo() {
