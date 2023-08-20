@@ -39,7 +39,7 @@
               <input name="isReaded"  type="checkbox" />
               <span class="font-size--sm">I have already read this book</span>
             </div>
-            <button class="font-size--md" type="submit">Add a NEW book</button>
+            <button class="form-button font-size--md" type="submit">Add a NEW book</button>
           </form>
 
           <footer>
@@ -58,98 +58,31 @@
         <p>Total Books: <span id="total-books">0</span></p>
       </div>
       <section class="grid main-section--container gap--sm">
-
-        <!-- <div class="box">
-          <div class="flex space-between">
-            <i class="fa-solid fa-pencil"></i>
-            <div>
-              <i class="fa-solid fa-check-double"></i>
-              <i class="fa-solid fa-trash margin-left--sm" style="color: #ffffff;"></i>
-            </div>
-          </div>
-          <div class="book flex center flex--column gap--lg margin-top--sm margin-bottom--lg">
-            <p class="book-title font-size--lg bold">"Factfulness"</p>
-            <p class="book-author font-size--sm "><em>Hans Rosling</em></p>
-            <div class="completed ">
-              <p class="status font-size--sm">Completed</p>
-          </div>
-          <div class="in-progress hidden">
-            <p class="font-size--sm margin-bottom--sm">In progress...</p>
-            <div class="loading">
-              <div class="fill"></div>
-            </div>
-          </div>
-          <div class="on-list hidden">
-            <p class="status font-size--sm">on my list!</p>
-          </div>
-          </div>
-          <p class="num-pages right-align">(341 pages)</p>
-        </div>
-
-        <div class="box">
-          <div class="flex space-between">
-            <i class="fa-solid fa-pencil"></i>
-            <div>
-              <i class="fa-solid fa-check-double"></i>
-              <i class="fa-solid fa-trash margin-left--sm" style="color: #ffffff;"></i>
-            </div>
-          </div>
-          <div class="book flex center flex--column gap--lg margin-top--sm margin-bottom--lg">
-            <p class="book-title font-size--lg bold">"Factfulness"</p>
-            <p class="book-author font-size--sm "><em>Hans Rosling</em></p>
-            <div class="completed hidden">
-              <p class="status font-size--sm">Completed</p>
-          </div>
-          <div class="in-progress">
-            <p class="font-size--sm margin-bottom--sm">In progress...</p>
-            <div class="loading">
-              <div class="fill"></div>
-            </div>
-          </div>
-          <div class="on-list hidden">
-            <p class="status font-size--sm">on my list!</p>
-          </div>
-          </div>
-          <p class="num-pages right-align">(341 pages)</p>
-        </div>
-
-        <div class="box">
-          <div class="flex space-between">
-            <i class="fa-solid fa-pencil"></i>
-            <div>
-              <i class="fa-solid fa-check-double "></i>
-              <i class="fa-solid fa-trash margin-left--sm" style="color: #ffffff;"></i>
-              
-            </div>
-          </div>
-          <div class="book flex center flex--column gap--lg margin-top--sm margin-bottom--lg">
-            <p class="book-title font-size--lg bold">"Factfulness"</p>
-            <p class="book-author font-size--sm "><em>Hans Rosling</em></p>
-            <div class="completed hidden">
-              <p class="status font-size--sm">Completed</p>
-          </div>
-          <div class="in-progress hidden">
-            <p class="font-size--sm margin-bottom--sm">In progress...</p>
-            <div class="loading">
-              <div class="fill"></div>
-            </div>
-          </div>
-          <div class="on-list">
-            <p class="status font-size--sm">on my list!</p>
-          </div>
-          </div>
-          <p class="num-pages right-align">(341 pages)</p>
-        </div> -->
-
-        
-
-        
-        
-
-        
+ 
 
       </section>
     </main>
   </div>
+
+  <!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-content--heading  margin-bottom--sm">
+      <h2 class="heading-secondary">Remove Book</h2>
+      <span class="close">&times;</span>
+    </div>
+
+    <div class="modal-content--main">
+      <p class="font-size--sm margin-bottom--lg">Are you sure you want to delete book from your library ?</p>
+      <div class="buttons flex center--vert flex-end">
+        <button class="btn btn--cancel">Cancel</button>
+        <button class="btn btn--delete margin-left--sm ">Delete</button>
+      </div>
+    </div>
+  </div>
+
+</div>
 </body>
 </html>

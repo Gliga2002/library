@@ -5,7 +5,12 @@ const mainSection = document.querySelector('.main-section');
 
 const inputsEl = document.querySelectorAll('input');
 const inputNumberReadEl = document.querySelector("#readed-pages");
-const checkbox = document.querySelector('input[type="checkbox"');
+const checkbox = document.querySelector('input[type="checkbox"]');
+
+const modal = document.getElementById("myModal");
+const span = document.querySelector(".close");
+const btnCancel = document.querySelector('.btn--cancel');
+const btnDelete = document.querySelector('.btn--delete');
 
 const readedBooksCountEl = document.querySelector('#readed-books-count');
 const unreadedBooksCountEl = document.querySelector('#unreaded-books-count');
@@ -17,7 +22,7 @@ const inputsArray = [...inputsEl];
 
 let prevClickedBox;
 
-const myLibrary = [];
+let myLibrary = [];
 let readedBooksCount = 0;
 let unreadedBooksCount = 0;
 let onMyList = 0;
@@ -34,7 +39,6 @@ function Book(author, title, numPages, readPages = null, read = false) {
 
 
 inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputElement => {
-    console.log(inputElement);
   // Debounce function to delay execution until the user stops typing
   function debounce(func, delay) {
     let timer;
@@ -94,16 +98,6 @@ mainSection.addEventListener('click', (e) => {
 })
 
 
-checkbox.addEventListener('change', function(e) {
-  if(this.checked) {
-    inputNumberReadEl.value = "";
-    inputNumberReadEl.closest('.input-box').classList.add('hidden');
-  } else {
-    inputNumberReadEl.closest('.input-box').classList.remove('hidden');
-  }
-})
-
-
 form.addEventListener('submit', function(e) {
   e.preventDefault();
   try {
@@ -116,14 +110,8 @@ form.addEventListener('submit', function(e) {
       readedPages: this.readedPages.value,
       isReaded: this.isReaded.checked
     }
-    console.log(this.author.value);
-    console.log(this.title.value);
-    console.log(this.numPages.value)
-    console.log(this.readedPages.value);
-    console.log(this.isReaded.checked);
   
     addBookToLibrary(userInput);
-
 
     resetInputs();
 
@@ -134,6 +122,17 @@ form.addEventListener('submit', function(e) {
 
 })
 
+checkbox.addEventListener('change', function(e) {
+  if(this.checked) {
+    inputNumberReadEl.value = "";
+    inputNumberReadEl.closest('.input-box').classList.add('hidden');
+  } else {
+    inputNumberReadEl.closest('.input-box').classList.remove('hidden');
+  }
+})
+
+
+
 
 function addBookToLibrary(inputs) {
   const newBook = new Book(inputs.author, inputs.title, inputs.numPages, inputs.readedPages, inputs.isReaded);
@@ -141,6 +140,8 @@ function addBookToLibrary(inputs) {
   myLibrary.push(newBook);
 
   displayBooks(myLibrary);
+
+  // handleIconsClick(document.querySelectorAll('.icon-box'));
 
   changeBooksInfo(newBook);
   // Ovo ces da promenis kad budes stavi local storage
@@ -157,19 +158,19 @@ function displayBooks(booksArray) {
     console.log(+book.numPages === +book.readPages);
     if(+book.numPages === +book.readPages || book.isRead) {
       status = `
-      <div class="completed">
+      <div class="status-div completed">
         <p class="status font-size--sm">Completed</p>
       </div>`
       //readPages da nema vrednost i da nije procitana
     } else if(!book.readPages && !book.isRead) {
       status = `
-      <div class="on-list">
+      <div class="status-div on-list">
         <p class="status font-size--sm">on my list!</p>
       </div>`
     } else if(book.readPages && !book.isRead) {
       // Dinamicki ga napravi
       status = `
-      <div class="in-progress">
+      <div class="status-div in-progress">
         <p class="font-size--sm margin-bottom--sm">In progress...</p>
         <div class="loading">
           <div style="width:${(+book.readPages / +book.numPages) * 100}%" class="fill"></div>
@@ -179,8 +180,8 @@ function displayBooks(booksArray) {
 
 
     html += `
-    <div class="box" data-index="${index}">
-      <div class="flex space-between">
+    <div class="box"  data-index="${index}">
+      <div onclick="handleIconsClick(event)" class="icon-box flex space-between">
         <i class="fa-solid fa-pencil"></i>
         <div>
           <i class="fa-solid fa-check-double"></i>
@@ -199,6 +200,37 @@ function displayBooks(booksArray) {
   mainSectionContainer.innerHTML = html;
 }
 
+span.addEventListener('click', (e) => {
+  modal.style.display = "none";
+})
+
+window.addEventListener('click', (event) => {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+})
+
+
+btnCancel.addEventListener('click', (e) => {
+  modal.style.display = "none";
+})
+
+btnDelete.addEventListener('click', (e) => {
+  const boxIndexNumber = +modal.dataset.index;
+  const box = myLibrary[boxIndexNumber];
+  console.log(box);
+  myLibrary = myLibrary.filter((book, index) => index !== boxIndexNumber);
+
+  displayBooks(myLibrary);
+
+  changeBooksInfo(box, true);
+
+  displayBooksInfo();
+
+  modal.style.display = "none";
+
+})
+
 
 function resetInputs() {
   inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputEl => {
@@ -206,19 +238,33 @@ function resetInputs() {
     inputEl.closest('.input-box').classList.remove('typing')
   }) 
 
-  form.reset();
+  inputNumberReadEl.closest('.input-box').classList.remove('hidden');
 
+  form.reset();
 }
 
-function changeBooksInfo(currBook) {
+function changeBooksInfo(currBook, remove=false) {
 
-  if(currBook.isRead || +currBook.numPages === +currBook.readPages) readedBooksCount++;
+  if(!remove) {
+    console.log('DONT REMOVE')
+    if(currBook.isRead || +currBook.numPages === +currBook.readPages) readedBooksCount++;
 
-  if(!currBook.isRead && currBook.readPages && +currBook.readPages !== +currBook.numPages) unreadedBooksCount++;
+    if(!currBook.isRead && currBook.readPages && +currBook.readPages !== +currBook.numPages) unreadedBooksCount++;
+
+    if(!currBook.isRead && !currBook.readPages) onMyList++;
+
+    totalBooks = myLibrary.length;
+  } else {
+    console.log('REMOVE');
+    if(currBook.isRead || +currBook.numPages === +currBook.readPages) readedBooksCount--;
+
+    if(!currBook.isRead && currBook.readPages && +currBook.readPages !== +currBook.numPages) unreadedBooksCount--;
+
+    if(!currBook.isRead && !currBook.readPages) onMyList--;
+
+    totalBooks = myLibrary.length;
+  }
   
-  if(!currBook.isRead && !currBook.readPages) onMyList++;
-
-  totalBooks = myLibrary.length;
 }
 
 
@@ -230,6 +276,27 @@ function displayBooksInfo() {
   totalBooksEl.textContent = totalBooks;
 }
 
+function handleIconsClick(e) {
+      if(e.target.closest('.fa-pencil')) {
+        console.log('pencil');
+
+      }
+    
+      if(e.target.closest('.fa-check-double')) {
+        console.log('check-double');
+      }
+    
+      if(e.target.closest('.fa-trash')) {
+        console.log('trash');
+        modal.style.display = "block";
+  
+        const box = e.target.closest('.box');
+        const boxIndexNumber = box.getAttribute('data-index');
+  
+        modal.setAttribute('data-index', boxIndexNumber)
+      }
+
+}
 
 
 

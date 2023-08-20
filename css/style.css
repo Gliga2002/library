@@ -30,11 +30,14 @@ html {
 :root {
   --aliceblue: aliceblue;
   --blue: #1f3e59;
+  --blue--darker: #1a3c5a;
   --cappucino:#e9c1af;
+  --full-white:rgb(255, 255, 255);
   --white:rgb(234, 228, 228);
   --gray:rgb(154, 154, 154);
   --green:rgb(56, 229, 56);
   --orange:rgb(255, 165, 0);
+  --red:rgb(206, 47, 47) ;
 }
 
 
@@ -92,6 +95,10 @@ body {
   justify-content: space-between;
 }
 
+.flex-end {
+  justify-content: flex-end;
+}
+
 .center--vert {
   align-items: center;
 }
@@ -135,12 +142,26 @@ body {
   font-size: 2rem;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
+.heading-secondary {
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 .right-align {
   text-align: right;
 }
 
 .bold {
   font-weight: bold;
+}
+
+.lt-sp--sm {
+  letter-spacing: 1px;
 }
 
 .margin-bottom--sm {
@@ -176,6 +197,30 @@ a:visited {
   color: var(--blue);
 }
 
+.btn {
+  padding: 1rem 2rem; 
+  border:none;
+}
+
+.btn--cancel {
+  background-color: var(--full-white);
+  color:var(--blue);
+  font-size: 1.5rem;
+  letter-spacing: 0.3px;
+
+}
+
+
+.btn--delete {
+  background-color: var(--red);
+  color:var(--full-white);
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+
 
 
 
@@ -206,7 +251,7 @@ input[type="checkbox"] {
   margin-right:5px;
 }
 
-button {
+.form-button {
   padding:1.8rem 2.2rem;
   width:70%;
   text-transform: uppercase;
@@ -327,5 +372,57 @@ span {
 input:focus {
   outline: none;
   border-bottom: 2px dotted var(--white);
+}
+
+
+/* MODAL */
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.65); /* Black w/ opacity */
+}
+
+.modal-content {
+  position:relative;
+  background-color: var(--full-white);
+  margin: 10% auto; /* 15% from the top and centered */
+  border: 2px solid #888;
+  width: 35%; /* Could be more or less, depending on screen size */
+}
+
+.modal-content--heading {
+  background-color: var(--blue);
+  color:var(--white);
+  padding:2rem;
+}
+
+.modal-content--main {
+  color:var(--blue);
+  padding:2rem;
+}
+
+/* The Close Button */
+.close {
+  position:absolute;
+  right:1.5%;
+  top:2%;
+  color: var(--full-white);
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: var(--white);
+  text-decoration: none;
+  cursor: pointer;
 }
 
