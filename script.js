@@ -16,6 +16,10 @@ const btnCancel = document.querySelector('.btn--cancel');
 const btnDelete = document.querySelector('.btn--delete');
 
 const updateForm = document.querySelector('.update-form');
+const titleInputUpdateEl = document.querySelector('#update-title');
+const authorInputUpdateEl = document.querySelector('#update-author');
+const pagesInputUpdateEl = document.querySelector('#update-num--pages');
+const readedInputUpdateEl = document.querySelector('#update-readed--pages');
 
 const readedBooksCountEl = document.querySelector('#readed-books-count');
 const unreadedBooksCountEl = document.querySelector('#unreaded-books-count');
@@ -207,8 +211,29 @@ function displayBooks(booksArray) {
 }
 
 
-updateForm.addEventListener('submit', (e) => {
+updateForm.addEventListener('submit', function(e) {
   e.preventDefault();
+   // Get input field values
+   const updatedBook = myLibrary[updateModal.dataset.index];
+
+   changeBooksInfo(updatedBook, true);
+   displayBooksInfo();
+
+   updatedBook.author = authorInputUpdateEl.value;
+   updatedBook.title = titleInputUpdateEl.value;
+   updatedBook.numPages = pagesInputUpdateEl.value;
+   updatedBook.readPages = readedInputUpdateEl.value;
+
+   modal.style.display = "none";
+   updateModal.style.display = "none";
+
+   displayBooks(myLibrary);
+
+   changeBooksInfo(updatedBook);
+   // Ovo ces da promenis kad budes stavi local storage
+   displayBooksInfo();
+
+  console.log('SUBMITED');
 })
 
 span.forEach(close => close.addEventListener('click', (e) => {
@@ -234,7 +259,7 @@ btnCancel.addEventListener('click', (e) => {
 })
 
 btnDelete.addEventListener('click', (e) => {
-  const boxIndexNumber = +modal.dataset.index;
+  const boxIndexNumber = +deleteModal.dataset.index;
   const box = myLibrary[boxIndexNumber];
   console.log(box);
   myLibrary = myLibrary.filter((book, index) => index !== boxIndexNumber);
@@ -297,6 +322,9 @@ function handleIconsClick(e) {
         console.log('pencil');
         displayModal(updateModal, e);
 
+        const box = myLibrary[updateModal.dataset.index];
+
+        fillInputValues(box);
       }
     
       if(e.target.closest('.fa-check-double')) {
@@ -310,6 +338,13 @@ function handleIconsClick(e) {
 
 }
 
+function fillInputValues(box) {
+  titleInputUpdateEl.value = box.title;
+  authorInputUpdateEl.value = box.author;
+  pagesInputUpdateEl.value = box.numPages;
+  readedInputUpdateEl.value = box.readPages;
+}
+
 function displayModal(modalContent, e) {
   modal.style.display = "block";
   modalContent.style.display = 'block';
@@ -318,7 +353,8 @@ function displayModal(modalContent, e) {
   const boxIndexNumber = box.getAttribute('data-index');
 
 
-  modal.setAttribute('data-index', boxIndexNumber)
+  modalContent.setAttribute('data-index', boxIndexNumber);
+
 }
 
 
