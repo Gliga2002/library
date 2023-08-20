@@ -3,14 +3,19 @@ const form = document.querySelector('form');
 const mainSectionContainer = document.querySelector('.main-section--container');
 const mainSection = document.querySelector('.main-section');
 
-const inputsEl = document.querySelectorAll('input');
+const inputsEl = document.querySelectorAll('.sidebar-input');
 const inputNumberReadEl = document.querySelector("#readed-pages");
 const checkbox = document.querySelector('input[type="checkbox"]');
 
+
 const modal = document.getElementById("myModal");
-const span = document.querySelector(".close");
+const span = document.querySelectorAll(".close");
+const deleteModal = document.querySelector('.delete-modal');
+const updateModal = document.querySelector('.update-modal');
 const btnCancel = document.querySelector('.btn--cancel');
 const btnDelete = document.querySelector('.btn--delete');
+
+const updateForm = document.querySelector('.update-form');
 
 const readedBooksCountEl = document.querySelector('#readed-books-count');
 const unreadedBooksCountEl = document.querySelector('#unreaded-books-count');
@@ -36,6 +41,7 @@ function Book(author, title, numPages, readPages = null, read = false) {
   this.readPages = readPages;
   this.isRead = read;
 }
+
 
 
 inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputElement => {
@@ -200,19 +206,31 @@ function displayBooks(booksArray) {
   mainSectionContainer.innerHTML = html;
 }
 
-span.addEventListener('click', (e) => {
-  modal.style.display = "none";
+
+updateForm.addEventListener('submit', (e) => {
+  e.preventDefault();
 })
+
+span.forEach(close => close.addEventListener('click', (e) => {
+  console.log('OVDEEEe')
+  modal.style.display = "none";
+  deleteModal.style.display = "none";
+  updateModal.style.display = "none";
+}))
+
 
 window.addEventListener('click', (event) => {
   if (event.target == modal) {
     modal.style.display = "none";
+    deleteModal.style.display = "none";
+    updateModal.style.display = "none";
   }
 })
 
 
 btnCancel.addEventListener('click', (e) => {
   modal.style.display = "none";
+  deleteModal.style.display = "none";
 })
 
 btnDelete.addEventListener('click', (e) => {
@@ -228,6 +246,7 @@ btnDelete.addEventListener('click', (e) => {
   displayBooksInfo();
 
   modal.style.display = "none";
+  deleteModal.style.display = "none";
 
 })
 
@@ -276,6 +295,7 @@ function displayBooksInfo() {
 function handleIconsClick(e) {
       if(e.target.closest('.fa-pencil')) {
         console.log('pencil');
+        displayModal(updateModal, e);
 
       }
     
@@ -285,15 +305,23 @@ function handleIconsClick(e) {
     
       if(e.target.closest('.fa-trash')) {
         console.log('trash');
-        modal.style.display = "block";
-  
-        const box = e.target.closest('.box');
-        const boxIndexNumber = box.getAttribute('data-index');
-  
-        modal.setAttribute('data-index', boxIndexNumber)
+        displayModal(deleteModal, e);
       }
 
 }
+
+function displayModal(modalContent, e) {
+  modal.style.display = "block";
+  modalContent.style.display = 'block';
+
+  const box = e.target.closest('.box');
+  const boxIndexNumber = box.getAttribute('data-index');
+
+
+  modal.setAttribute('data-index', boxIndexNumber)
+}
+
+
 
 
 

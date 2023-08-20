@@ -20,26 +20,26 @@
 
           <form id="form-container" action="#" method="POST" class="flex flex--column gap--el">
             <div class="input-box">
-              <input name="title" type="text" required spellcheck="false" autocomplete="off"/>
+              <input class="sidebar-input" name="title" type="text" required spellcheck="false" autocomplete="off"/>
               <span class="input-box--text font-size--sm">What is title of the book?</span>
             </div>
             <div class="input-box">
-              <input name="author" type="text" required spellcheck="false" autocomplete="off"/>
+              <input class="sidebar-input" name="author" type="text" required spellcheck="false" autocomplete="off"/>
               <span class="input-box--text font-size--sm">Who is the author of the book?</span>
             </div>
             <div class="input-box">
-              <input name="numPages"id="num-pages" type="number" autocomplete="off" required />
+              <input class="sidebar-input" name="numPages"id="num-pages" type="number" autocomplete="off" required />
               <span class="input-box--text font-size--sm" required>How many pages are in the book?</span>
             </div>
             <div class="input-box">
-              <input class="readed-pages" id='readed-pages'name="readedPages" type="number" autocomplete="off"/>
+              <input  class="sidebar-input readed-pages" id='readed-pages'name="readedPages" type="number" autocomplete="off"/>
               <span class="input-box--text font-size--sm">How many pages you readed?</span>
             </div>
             <div class="input-checkbox flex center--vert">
-              <input name="isReaded"  type="checkbox" />
+              <input class="sidebar-input" name="isReaded"  type="checkbox" />
               <span class="font-size--sm">I have already read this book</span>
             </div>
-            <button class="form-button font-size--md" type="submit">Add a NEW book</button>
+            <button class="btn btn--form font-size--md" type="submit">Add a NEW book</button>
           </form>
 
           <footer>
@@ -68,7 +68,7 @@
 <div id="myModal" class="modal">
 
   <!-- Modal content -->
-  <div class="modal-content">
+  <div class="modal-content delete-modal">
     <div class="modal-content--heading  margin-bottom--sm">
       <h2 class="heading-secondary">Remove Book</h2>
       <span class="close">&times;</span>
@@ -80,6 +80,35 @@
         <button class="btn btn--cancel">Cancel</button>
         <button class="btn btn--delete margin-left--sm ">Delete</button>
       </div>
+    </div>
+  </div>
+
+  <div class="modal-content update-modal">
+    <div class="modal-content--heading  margin-bottom--sm">
+      <h2 class="heading-secondary">Update Book</h2>
+      <span class="close">&times;</span>
+    </div>
+
+    <div class="modal-content--main ">
+      <form class="update-form flex flex--column center" action="">
+        <div class="input-box--update margin-bottom--md">
+          <label for="update-title" class="font-size--sm">Title</label>
+          <input id="update-title" class="modal-input"name="title" type="text"  spellcheck="false" autocomplete="off"/>
+        </div>
+        <div class="input-box--update margin-bottom--md">
+          <label for="update-author" class="font-size--sm">Author</label>
+          <input id="update-author" class="modal-input" name="author" type="text" required spellcheck="false" autocomplete="off"/>
+        </div>
+        <div class="input-box--update margin-bottom--md">
+          <label for="update-num--pages" class="font-size--sm">Number of pages</label>
+          <input id="update-num--pages" class="modal-input" name="numPages"id="num-pages" type="number" autocomplete="off"  />
+        </div>
+        <div class="input-box--update margin-bottom--sm">
+          <label for="update-readed--pages" class="font-size--sm">Readed pages</label>
+          <input id="update-readed--pages" class="modal-input" name="readedPages" type="number" autocomplete="off"/>
+        </div>
+        <button class="btn btn--edit" type="submit">Edit</button>
+      </form>
     </div>
   </div>
 

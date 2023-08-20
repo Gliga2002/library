@@ -200,6 +200,11 @@ a:visited {
 .btn {
   padding: 1rem 2rem; 
   border:none;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+
+  transition: all 0.3s;
 }
 
 .btn--cancel {
@@ -236,7 +241,7 @@ footer {
   position:relative;
 }
 
-input {
+.sidebar-input {
   width:100%;
   padding: 15px 0 5px 0;
   border:none;
@@ -245,13 +250,18 @@ input {
   color:var(--blue);
 }
 
+.sidebar-input:focus {
+  outline: none;
+  border-bottom: 2px dotted var(--white);
+}
+
 input[type="checkbox"] {
   width:1.8rem;
   height: 1.8rem;
   margin-right:5px;
 }
 
-.form-button {
+.btn--form {
   padding:1.8rem 2.2rem;
   width:70%;
   text-transform: uppercase;
@@ -274,9 +284,6 @@ footer p {
 
 /* MAIN SECTION */
 
-.main-section--info {
-
-}
 
 .main-section--info p{
   text-transform: uppercase;
@@ -369,10 +376,7 @@ span {
   font-size: 1.2rem;
 }
 
-input:focus {
-  outline: none;
-  border-bottom: 2px dotted var(--white);
-}
+
 
 
 /* MODAL */
@@ -391,11 +395,20 @@ input:focus {
 }
 
 .modal-content {
+  /* display: none; */
   position:relative;
   background-color: var(--full-white);
-  margin: 10% auto; /* 15% from the top and centered */
+  margin: 8% auto; /* 8% from the top and centered */
   border: 2px solid #888;
   width: 35%; /* Could be more or less, depending on screen size */
+}
+
+.delete-modal {
+  display: none;
+}
+
+.update-modal {
+  display:none;
 }
 
 .modal-content--heading {
@@ -406,7 +419,7 @@ input:focus {
 
 .modal-content--main {
   color:var(--blue);
-  padding:2rem;
+  padding:1rem;
 }
 
 /* The Close Button */
@@ -425,4 +438,29 @@ input:focus {
   text-decoration: none;
   cursor: pointer;
 }
+
+/* FORM MODAL */
+.input-box--update {
+  width: 75%;
+}
+
+.modal-input {
+  width:100%;
+  padding: 1rem;
+  background-color: var(--blue);
+  color:var(--full-white);
+  font-size:1.7rem;
+}
+
+.modal-input:focus {
+  outline: none;
+}
+
+.btn--edit {
+  background-color: var(--cappucino);
+  border:1.8px solid var(--blue);
+  color:var(--blue);
+  letter-spacing: 0.8px;
+}
+
 
