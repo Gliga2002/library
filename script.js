@@ -41,8 +41,8 @@ let totalBooks = 0;
 function Book(author, title, numPages, readPages = null, read = false) {
   this.author = author;
   this.title = title,
-  this.numPages = numPages;
-  this.readPages = readPages;
+  this.numPages = +numPages;
+  this.readPages = +readPages;
   this.isRead = read;
 }
 
@@ -60,7 +60,6 @@ inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isRead
     };
   }
 
-
   function processInput() {
     const inputValue = inputElement.value;
     console.log("Input value:", inputValue);
@@ -71,14 +70,10 @@ inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isRead
           console.log('ovde')
           inputElement.closest('.input-box').classList.remove('typing');
         }
-
-      
   }
-
   const debouncedProcessInput = debounce(processInput, 200); // Delay of 300 milliseconds
 
   inputElement.addEventListener("input", debouncedProcessInput);
-
 })
 
 
@@ -151,8 +146,6 @@ function addBookToLibrary(inputs) {
 
   displayBooks(myLibrary);
 
-  // handleIconsClick(document.querySelectorAll('.icon-box'));
-
   changeBooksInfo(newBook);
   // Ovo ces da promenis kad budes stavi local storage
   displayBooksInfo();
@@ -195,12 +188,18 @@ updateForm.addEventListener('submit', function(e) {
    // Get input field values
    const updatedBook = myLibrary[updateModal.dataset.index];
 
-   changeBooksInfo(updatedBook, true);
-
    updatedBook.author = authorInputUpdateEl.value;
    updatedBook.title = titleInputUpdateEl.value;
    updatedBook.numPages = pagesInputUpdateEl.value;
    updatedBook.readPages = readedInputUpdateEl.value;
+
+   // Proveri ako je stavio status da je procitao i promeni num pages, da je to greska
+   if(updatedBook.isRead && updatedBook.numPages !== updatedBook.readPages) {
+    alert(`You can't set different read pages from number of pages, when book is readed`);
+    return
+   }
+
+   changeBooksInfo(updatedBook, true);
 
    modal.style.display = "none";
    updateModal.style.display = "none";
@@ -215,18 +214,17 @@ updateForm.addEventListener('submit', function(e) {
 })
 
 span.forEach(close => close.addEventListener('click', (e) => {
-  console.log('OVDEEEe')
   modal.style.display = "none";
-  deleteModal.style.display = "none";
-  updateModal.style.display = "none";
+
+  setModalContentHidden();
 }))
 
 
 window.addEventListener('click', (event) => {
   if (event.target == modal) {
     modal.style.display = "none";
-    deleteModal.style.display = "none";
-    updateModal.style.display = "none";
+
+    setModalContentHidden();
   }
 })
 
@@ -254,7 +252,7 @@ btnDelete.addEventListener('click', (e) => {
 })
 
 function setStatus(book) {
-  if(+book.numPages === +book.readPages || book.isRead) {
+  if(book.numPages === book.readPages || book.isRead) {
     return `
     <div class="status-div completed">
       <p class="status font-size--sm">Completed</p>
@@ -280,7 +278,7 @@ function setStatus(book) {
 
 function resetInputs() {
   inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputEl => {
-    console.log(inputEl);
+  
     inputEl.closest('.input-box').classList.remove('typing')
   }) 
 
@@ -289,22 +287,25 @@ function resetInputs() {
   form.reset();
 }
 
-function changeBooksInfo(currBook, remove=false) {
 
+function setModalContentHidden() {
+  deleteModal.style.display = "none";
+  updateModal.style.display = "none";
+}
+
+function changeBooksInfo(currBook, remove=false) {
   if(!remove) {
-    console.log('DONT REMOVE')
     checkBookStatus(currBook)
   } else {
-    console.log('REMOVE');
     checkBookStatus(currBook, true)
   }
   
 }
 
 function checkBookStatus(currBook, remove=false) {
-  if(currBook.isRead || +currBook.numPages === +currBook.readPages) remove ? readedBooksCount-- : readedBooksCount ++;
+  if(currBook.isRead || currBook.numPages === currBook.readPages) remove ? readedBooksCount-- : readedBooksCount ++;
 
-    if(!currBook.isRead && currBook.readPages && +currBook.readPages !== +currBook.numPages) remove ? unreadedBooksCount-- : unreadedBooksCount++;
+    if(!currBook.isRead && currBook.readPages && currBook.readPages !== currBook.numPages) remove ? unreadedBooksCount-- : unreadedBooksCount++;
 
     if(!currBook.isRead && !currBook.readPages) remove ? onMyList-- : onMyList++;
 
@@ -321,7 +322,6 @@ function displayBooksInfo() {
 
 function handleIconsClick(e) {
       if(e.target.closest('.fa-pencil')) {
-        console.log('pencil');
         displayModal(updateModal, e);
 
         const box = myLibrary[updateModal.dataset.index];
@@ -330,8 +330,6 @@ function handleIconsClick(e) {
       }
     
       if(e.target.closest('.fa-check-double')) {
-        console.log('check-double');
-
         const box = e.target.closest('.box');
         const completedBook = myLibrary[box.getAttribute('data-index')];
 
@@ -342,22 +340,15 @@ function handleIconsClick(e) {
         completedBook.isRead = true;
         completedBook.readPages = completedBook.numPages;
 
-        console.log(box.lastElementChild);
         box.lastElementChild.textContent = `(${completedBook.numPages} | ${completedBook.numPages} pages)`;
-
         const book = box.children[1];
-   
         // remove current status
         book.lastElementChild.style.display = "none";
-
-        
-
         // Create a new DOMParser instance
         const parser = new DOMParser();
 
         // Parse the HTML string into a Document object
         const doc = parser.parseFromString(setStatus(completedBook), 'text/html');
-
         // Now you can work with the Document object as if it's a real HTML document
         const divElement = doc.querySelector('.status-div');
 
@@ -371,7 +362,6 @@ function handleIconsClick(e) {
       }
     
       if(e.target.closest('.fa-trash')) {
-        console.log('trash');
         displayModal(deleteModal, e);
       }
 
@@ -390,7 +380,6 @@ function displayModal(modalContent, e) {
 
   const box = e.target.closest('.box');
   const boxIndexNumber = box.getAttribute('data-index');
-
 
   modalContent.setAttribute('data-index', boxIndexNumber);
 
