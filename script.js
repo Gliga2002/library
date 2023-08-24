@@ -38,13 +38,16 @@ let onMyList = 0;
 let totalBooks = 0;
 
 
-function Book(author, title, numPages, readPages = null, read = false) {
-  this.author = author;
-  this.title = title,
-  this.numPages = +numPages;
-  this.readPages = +readPages;
-  this.isRead = read;
+class Book {
+  constructor(author, title, numPages, readPages = null, read = false) {
+    this.author = author;
+    this.title = title,
+    this.numPages = +numPages;
+    this.readPages = +readPages;
+    this.isRead = read;
+  }
 }
+
 
 
 
