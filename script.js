@@ -212,7 +212,7 @@ function displayBooks(booksArray) {
         <p class="book-author font-size--sm "><em>${book.author}</em></p>
         ${status}
     </div>
-    <p class="num-pages right-align">(${book.readPages ? book.readPages + " | " : ""}${book.numPages} pages)</p>
+    <p class="num-pages right-align">(${book.readPages ? parseInt(book.readPages, 10) + " | " : ""}${parseInt(book.numPages, 10)} pages)</p>
   </div>`
   })
 
@@ -351,12 +351,16 @@ updateForm.addEventListener('submit', function (e) {
   const updatedBook = myLibrary[updateModal.dataset.index];
 
   // Proveri ako je stavio status da je procitao i promeni num pages, da je to greska
-  if (updatedBook.isRead && (pagesInputUpdateEl.value !== updatedBook.numPages || readedInputUpdateEl.value !== updatedBook.readPages)) {
+  console.log(typeof pagesInputUpdateEl.value)
+  console.log(typeof updatedBook.numPages)
+  if (updatedBook.isRead && (parseInt(pagesInputUpdateEl.value, 10) !== updatedBook.numPages || parseInt(readedInputUpdateEl.value, 10) !== updatedBook.readPages)) {
     alert(`You can't set different read pages from number of pages, when book is readed`);
     return
   }
 
-  if (readedInputUpdateEl.value > pagesInputUpdateEl.value) {
+  console.log(parseInt(readedInputUpdateEl.value, 10))
+  console.log(parseInt(pagesInputUpdateEl.value, 10))
+  if (parseInt(readedInputUpdateEl.value, 10) > parseInt(pagesInputUpdateEl.value, 10)) {
     alert(`You can't set more readed pages than actual number`);
     return
   }
@@ -365,8 +369,8 @@ updateForm.addEventListener('submit', function (e) {
 
   updatedBook.author = authorInputUpdateEl.value;
   updatedBook.title = titleInputUpdateEl.value;
-  updatedBook.numPages = pagesInputUpdateEl.value;
-  updatedBook.readPages = readedInputUpdateEl.value;
+  updatedBook.numPages = parseInt(pagesInputUpdateEl.value, 10)
+  updatedBook.readPages = parseInt(readedInputUpdateEl.value, 10);
 
   if (updatedBook.numPages === updatedBook.readPages) updatedBook.isRead = true;
 
