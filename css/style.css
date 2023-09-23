@@ -12,7 +12,7 @@ footer {
 
 .sidebar-input {
   width: 100%;
-  padding: 15px 0 5px 0;
+  padding: 15px 0 3px 0;
   border: none;
   background-color: var(--cappucino);
   border-bottom: 2px dotted var(--blue);
@@ -136,18 +136,22 @@ span {
 
 
 /* .typing span, */
-.typing:invalid+span,
-.typing:valid+span,
+.constraintVal.typing:invalid+span,
+.constraintVal.typing:valid+span,
+.javaScriptVal.typing.invalid+span,
+.javaScriptVal.typing.valid+span,
 .clicked span {
   top: -20%;
   font-size: 1.2rem;
 }
 
-.typing:invalid {
+.constraintVal.typing:invalid,
+.javaScriptVal.typing.invalid {
   border-bottom: 2px dotted rgb(214, 8, 8);
 }
 
-.typing:valid {
+.constraintVal.typing:valid,
+.javaScriptVal.typing.valid {
   border-bottom: 2px dotted rgb(7, 200, 7);
 }
 

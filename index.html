@@ -23,27 +23,28 @@
 
         <form id="form-container" action="#" method="POST" class="flex flex--column gap--el">
           <div class="input-box">
-            <input class="sidebar-input" name="title" type="text" required spellcheck="false" autocomplete="off"
-              minlength="5" />
+            <input class="sidebar-input constraintVal" name="title" type="text" required spellcheck="false"
+              autocomplete="off" minlength="5" />
             <span class="input-box--text font-size--md">What is title of the book?</span>
             <span class="error" aria-live="polite"></span>
           </div>
           <div class="input-box">
-            <input class="sidebar-input" name="author" type="text" required spellcheck="false" autocomplete="off"
-              minlength="5" />
+            <input class="sidebar-input constraintVal" name="author" type="text" required spellcheck="false"
+              autocomplete="off" minlength="5" />
             <span class="input-box--text font-size--md">Who is the author of the book?</span>
             <span class="error" aria-live="polite"></span>
           </div>
           <div class="input-box">
-            <input class="sidebar-input" name="numPages" id="num-pages" type="number" autocomplete="off" required
-              min="20" />
+            <input class="sidebar-input constraintVal number-pages" name="numPages" id="num-pages" type="number"
+              autocomplete="off" required min="20" />
             <span class="input-box--text font-size--md" required>How many pages are in the book?</span>
             <span class="error" aria-live="polite"></span>
           </div>
           <div class="input-box">
-            <input class="sidebar-input readed-pages" id='readed-pages' name="readedPages" type="number"
+            <input class="sidebar-input javaScriptVal readed-pages " id='readed-pages' name="readedPages" type="number"
               autocomplete="off" />
             <span class="input-box--text font-size--md">How many pages you readed?</span>
+            <span class="error" aria-live="polite"></span>
           </div>
           <div class="input-checkbox flex center--vert">
             <input class="sidebar-input" name="isReaded" type="checkbox" />

@@ -7,8 +7,6 @@ const inputsEl = document.querySelectorAll('.sidebar-input');
 const inputNumberReadEl = document.querySelector("#readed-pages");
 const checkbox = document.querySelector('input[type="checkbox"]');
 
-
-
 const modal = document.getElementById("myModal");
 const span = document.querySelectorAll(".close");
 const deleteModal = document.querySelector('.delete-modal');
@@ -41,13 +39,11 @@ let totalBooks = 0;
 
 function Book(author, title, numPages, readPages = null, read = false) {
   this.author = author;
-  this.title = title,
-    this.numPages = +numPages;
+  this.title = title;
+  this.numPages = +numPages;
   this.readPages = +readPages;
   this.isRead = read;
 }
-
-
 
 inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputElement => {
   // Debounce function to delay execution until the user stops typing
@@ -62,51 +58,69 @@ inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isRead
   }
 
   function processInput() {
-    const inputValue = inputElement.value;
-    const inputBoxEl = inputElement.closest('.input-box');
-    const errorMsgEl = inputBoxEl.querySelector('.error');
+    // DOM Traversing
+    const errorMsgEl = inputElement.closest('.input-box').querySelector('.error');
 
-    console.log("Input value:", inputValue);
-    // Perform your function's logic here
+    checkIfTyping(inputElement)
+
     if (!inputElement.checkValidity()) {
-      showError(inputElement, errorMsgEl)
+      showError(inputElement, errorMsgEl);
+      return;
     } else {
-      errorMsgEl.textContent = ""; // Reset the content of the message
+      errorMsgEl.textContent = "";
     }
 
-    if (inputValue !== "") {
-      inputElement.classList.add('typing');
-    } else {
-      inputElement.classList.remove('typing');
+    // Posebna provera za readed pages
+    if (inputElement.classList.contains('readed-pages') || inputElement.classList.contains('number-pages')) {
+      checkReadedPagesValidation();
     }
   }
+
   const debouncedProcessInput = debounce(processInput, 200); // Delay of 300 milliseconds
 
   inputElement.addEventListener("input", debouncedProcessInput);
 })
 
+function checkIfTyping(inputEl) {
+  const inputValue = inputEl.value;
+  if (inputValue !== "") {
+    inputEl.classList.add('typing');
+  } else {
+    inputEl.classList.remove('typing');
+  }
+}
+
+function checkReadedPagesValidation() {
+  const numPagesEl = document.querySelector('#num-pages');
+  const readedPagesEl = document.querySelector('#readed-pages');
+  const errorMsgEl = readedPagesEl.closest('.input-box').querySelector('.error');
+
+  if (+readedPagesEl.value > +numPagesEl.value || +readedPagesEl.value < 0) {
+    errorMsgEl.innerHTML = "Invalid Inputs (Check pages input data)";
+    readedPagesEl.classList.add('invalid');
+    readedPagesEl.classList.remove('valid');
+  } else {
+    errorMsgEl.innerHTML = '';
+    readedPagesEl.classList.add('valid');
+    readedPagesEl.classList.remove('invalid');
+  }
+}
+
+
 function showError(typingInputEl, errorMsgEl) {
   if (typingInputEl.validity.valueMissing) {
     errorMsgEl.innerHTML = 'Please fill up this form.'
-  } else if (typingInputEl.validity.typeMismatch) {
-    errorMsgEl.innerHTML = 'Entered value needs to be text.'
   } else if (typingInputEl.validity.tooShort) {
     errorMsgEl.innerHTML = `You should enter at least ${typingInputEl.minLength} characters; you entered ${typingInputEl.value.length}.`;
   } else if (typingInputEl.validity.rangeUnderflow) {
     errorMsgEl.innerHTML = `You book should have at least ${typingInputEl.min} pages; your's have ${typingInputEl.value}.`
   }
-
 }
 
 sidebar.addEventListener('click', (e) => {
   const inputBox = e.target.closest('.input-box');
-  if (!inputBox) {
-
-    if (prevClickedBox) prevClickedBox.classList.remove('clicked');
-    return;
-  };
-
   if (prevClickedBox) prevClickedBox.classList.remove('clicked');
+  if (!inputBox) return;
 
   inputBox.classList.add('clicked');
 
@@ -114,46 +128,38 @@ sidebar.addEventListener('click', (e) => {
   inputEl.focus();
 
   prevClickedBox = inputBox;
-
 });
-
 
 mainSection.addEventListener('click', (e) => {
   if (prevClickedBox) prevClickedBox.classList.remove('clicked');
 })
 
-
 form.addEventListener('submit', function (e) {
   e.preventDefault();
-  try {
-    if (+this.readedPages.value > +this.numPages.value || +this.readedPages.value < 0 || +this.numPages <= 0) throw new Error("Invalid Inputs (Check pages input data)")
 
-    removeTypingClasses()
+  // Moram sa JS rucno jer nisam koristio constrain validation
+  if (!isReadedPageValid.call(this)) return
 
-    const userInput = {
-      author: this.author.value,
-      title: this.title.value,
-      numPages: this.numPages.value,
-      readedPages: this.readedPages.value,
-      isReaded: this.isReaded.checked
-    }
-
-    addBookToLibrary(userInput);
-
-    resetInputs();
-
+  const userInput = {
+    author: this.author.value,
+    title: this.title.value,
+    numPages: this.numPages.value,
+    readedPages: this.readedPages.value,
+    isReaded: this.isReaded.checked
   }
-  catch (err) {
-    alert(err);
-  }
+
+  addBookToLibrary(userInput);
+
+  initForm();
+
+
 
 })
 
-function removeTypingClasses() {
-  const inputNodeList = document.querySelectorAll('input');
-  const inputArray = Array.from(inputNodeList);
+function isReadedPageValid() {
+  if (+this.readedPages.value > +this.numPages.value || +this.readedPages.value < 0) return false;
 
-  inputArray.forEach((inputEl) => inputEl.classList.remove('typing'));
+  return true;
 }
 
 function addBookToLibrary(inputs) {
@@ -168,33 +174,30 @@ function addBookToLibrary(inputs) {
   displayBooksInfo();
 }
 
-function resetInputs() {
-  inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputEl => {
-
-    inputEl.closest('.input-box').classList.remove('typing')
-  })
-
+function initForm() {
+  removeTypingClasses();
   inputNumberReadEl.closest('.input-box').classList.remove('hidden');
-
   form.reset();
 }
 
+function removeTypingClasses() {
+  const inputNodeList = document.querySelectorAll('input');
+  const inputArray = Array.from(inputNodeList);
 
+  inputArray.forEach((inputEl) => inputEl.classList.remove('typing'));
+}
 
 checkbox.addEventListener('change', function (e) {
   if (this.checked) {
     inputNumberReadEl.value = "";
     inputNumberReadEl.closest('.input-box').classList.add('hidden');
+    inputNumberReadEl.closest('.input-box').querySelector('.error').innerHTML = ''
+    inputNumberReadEl.classList.remove('valid');
+    inputNumberReadEl.classList.remove('invalid');
   } else {
     inputNumberReadEl.closest('.input-box').classList.remove('hidden');
   }
 })
-
-
-
-
-
-
 
 function displayBooks(booksArray) {
 
