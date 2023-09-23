@@ -25,7 +25,6 @@ const unreadedBooksCountEl = document.querySelector('#unreaded-books-count');
 const onMyListEl = document.querySelector('#on-my-list');
 const totalBooksEl = document.querySelector('#total-books');
 
-
 const inputsArray = [...inputsEl];
 
 let prevClickedBox;
@@ -90,6 +89,16 @@ function checkIfTyping(inputEl) {
   }
 }
 
+function showError(typingInputEl, errorMsgEl) {
+  if (typingInputEl.validity.valueMissing) {
+    errorMsgEl.innerHTML = 'Please fill up this form.'
+  } else if (typingInputEl.validity.tooShort) {
+    errorMsgEl.innerHTML = `You should enter at least ${typingInputEl.minLength} characters; you entered ${typingInputEl.value.length}.`;
+  } else if (typingInputEl.validity.rangeUnderflow) {
+    errorMsgEl.innerHTML = `You book should have at least ${typingInputEl.min} pages; your's have ${typingInputEl.value}.`
+  }
+}
+
 function checkReadedPagesValidation() {
   const numPagesEl = document.querySelector('#num-pages');
   const readedPagesEl = document.querySelector('#readed-pages');
@@ -103,17 +112,6 @@ function checkReadedPagesValidation() {
     errorMsgEl.innerHTML = '';
     readedPagesEl.classList.add('valid');
     readedPagesEl.classList.remove('invalid');
-  }
-}
-
-
-function showError(typingInputEl, errorMsgEl) {
-  if (typingInputEl.validity.valueMissing) {
-    errorMsgEl.innerHTML = 'Please fill up this form.'
-  } else if (typingInputEl.validity.tooShort) {
-    errorMsgEl.innerHTML = `You should enter at least ${typingInputEl.minLength} characters; you entered ${typingInputEl.value.length}.`;
-  } else if (typingInputEl.validity.rangeUnderflow) {
-    errorMsgEl.innerHTML = `You book should have at least ${typingInputEl.min} pages; your's have ${typingInputEl.value}.`
   }
 }
 
@@ -134,59 +132,6 @@ mainSection.addEventListener('click', (e) => {
   if (prevClickedBox) prevClickedBox.classList.remove('clicked');
 })
 
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  // Moram sa JS rucno jer nisam koristio constrain validation
-  if (!isReadedPageValid.call(this)) return
-
-  const userInput = {
-    author: this.author.value,
-    title: this.title.value,
-    numPages: this.numPages.value,
-    readedPages: this.readedPages.value,
-    isReaded: this.isReaded.checked
-  }
-
-  addBookToLibrary(userInput);
-
-  initForm();
-
-
-
-})
-
-function isReadedPageValid() {
-  if (+this.readedPages.value > +this.numPages.value || +this.readedPages.value < 0) return false;
-
-  return true;
-}
-
-function addBookToLibrary(inputs) {
-  const newBook = new Book(inputs.author, inputs.title, inputs.numPages, inputs.readedPages, inputs.isReaded);
-
-  myLibrary.push(newBook);
-
-  displayBooks(myLibrary);
-
-  changeBooksInfo(newBook);
-  // Ovo ces da promenis kad budes stavi local storage
-  displayBooksInfo();
-}
-
-function initForm() {
-  removeTypingClasses();
-  inputNumberReadEl.closest('.input-box').classList.remove('hidden');
-  form.reset();
-}
-
-function removeTypingClasses() {
-  const inputNodeList = document.querySelectorAll('input');
-  const inputArray = Array.from(inputNodeList);
-
-  inputArray.forEach((inputEl) => inputEl.classList.remove('typing'));
-}
-
 checkbox.addEventListener('change', function (e) {
   if (this.checked) {
     inputNumberReadEl.value = "";
@@ -199,12 +144,59 @@ checkbox.addEventListener('change', function (e) {
   }
 })
 
-function displayBooks(booksArray) {
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
 
+  // Moram sa JS rucno jer nisam koristio constrain validation
+  if (!isReadedPageValid.call(this)) return
+
+  const userInput = getInputs.call(this);
+  console.log(userInput);
+
+  addBookToLibrary(userInput);
+
+  initForm();
+})
+
+function isReadedPageValid() {
+  if (+this.readedPages.value > +this.numPages.value || +this.readedPages.value < 0) return false;
+
+  return true;
+}
+
+function getInputs() {
+  const userInput = {
+    author: this.author.value,
+    title: this.title.value,
+    numPages: this.numPages.value,
+    readedPages: this.readedPages.value,
+    isRead: this.isReaded.checked
+  }
+
+  if (userInput.isRead) userInput.readedPages = userInput.numPages;
+  if (userInput.numPages === userInput.readedPages) userInput.isRead = true;
+
+  console.log({ userInput });
+
+  return userInput;
+}
+
+function addBookToLibrary(inputs) {
+  const newBook = new Book(inputs.author, inputs.title, inputs.numPages, inputs.readedPages, inputs.isRead);
+
+  myLibrary.push(newBook);
+
+  displayBooks(myLibrary);
+
+  changeBooksInfo(newBook);
+  // Ovo ces da promenis kad budes stavi local storage
+  displayBooksInfo();
+}
+
+function displayBooks(booksArray) {
   let html = '';
   booksArray.forEach((book, index) => {
     let status = setStatus(book);
-
 
     html += `
     <div class="box"  data-index="${index}">
@@ -226,77 +218,6 @@ function displayBooks(booksArray) {
 
   mainSectionContainer.innerHTML = html;
 }
-
-
-
-
-updateForm.addEventListener('submit', function (e) {
-  e.preventDefault();
-  // Get input field values
-  const updatedBook = myLibrary[updateModal.dataset.index];
-
-  updatedBook.author = authorInputUpdateEl.value;
-  updatedBook.title = titleInputUpdateEl.value;
-  updatedBook.numPages = pagesInputUpdateEl.value;
-  updatedBook.readPages = readedInputUpdateEl.value;
-
-  // Proveri ako je stavio status da je procitao i promeni num pages, da je to greska
-  if (updatedBook.isRead && updatedBook.numPages !== updatedBook.readPages) {
-    alert(`You can't set different read pages from number of pages, when book is readed`);
-    return
-  }
-
-  changeBooksInfo(updatedBook, true);
-
-  modal.style.display = "none";
-  updateModal.style.display = "none";
-
-  displayBooks(myLibrary);
-
-  changeBooksInfo(updatedBook);
-  // Ovo ces da promenis kad budes stavi local storage
-  displayBooksInfo();
-
-  console.log('SUBMITED');
-})
-
-span.forEach(close => close.addEventListener('click', (e) => {
-  modal.style.display = "none";
-
-  setModalContentHidden();
-}))
-
-
-window.addEventListener('click', (event) => {
-  if (event.target == modal) {
-    modal.style.display = "none";
-
-    setModalContentHidden();
-  }
-})
-
-
-btnCancel.addEventListener('click', (e) => {
-  modal.style.display = "none";
-  deleteModal.style.display = "none";
-})
-
-btnDelete.addEventListener('click', (e) => {
-  const boxIndexNumber = +deleteModal.dataset.index;
-  const box = myLibrary[boxIndexNumber];
-  console.log(box);
-  myLibrary = myLibrary.filter((book, index) => index !== boxIndexNumber);
-
-  displayBooks(myLibrary);
-
-  changeBooksInfo(box, true);
-
-  displayBooksInfo();
-
-  modal.style.display = "none";
-  deleteModal.style.display = "none";
-
-})
 
 function setStatus(book) {
   if (book.numPages === book.readPages || book.isRead) {
@@ -320,42 +241,6 @@ function setStatus(book) {
       </div>
     </div>`
   }
-}
-
-
-
-
-
-function setModalContentHidden() {
-  deleteModal.style.display = "none";
-  updateModal.style.display = "none";
-}
-
-function changeBooksInfo(currBook, remove = false) {
-  if (!remove) {
-    checkBookStatus(currBook)
-  } else {
-    checkBookStatus(currBook, true)
-  }
-
-}
-
-function checkBookStatus(currBook, remove = false) {
-  if (currBook.isRead || currBook.numPages === currBook.readPages) remove ? readedBooksCount-- : readedBooksCount++;
-
-  if (!currBook.isRead && currBook.readPages && currBook.readPages !== currBook.numPages) remove ? unreadedBooksCount-- : unreadedBooksCount++;
-
-  if (!currBook.isRead && !currBook.readPages) remove ? onMyList-- : onMyList++;
-
-  totalBooks = myLibrary.length;
-}
-
-
-function displayBooksInfo() {
-  readedBooksCountEl.textContent = readedBooksCount;
-  unreadedBooksCountEl.textContent = unreadedBooksCount
-  onMyListEl.textContent = onMyList;
-  totalBooksEl.textContent = totalBooks;
 }
 
 function handleIconsClick(e) {
@@ -391,18 +276,15 @@ function handleIconsClick(e) {
     const divElement = doc.querySelector('.status-div');
 
     book.appendChild(divElement);
-    // Output: Hello, world!
 
     changeBooksInfo(completedBook);
     displayBooksInfo();
-
 
   }
 
   if (e.target.closest('.fa-trash')) {
     displayModal(deleteModal, e);
   }
-
 }
 
 function fillInputValues(box) {
@@ -420,8 +302,125 @@ function displayModal(modalContent, e) {
   const boxIndexNumber = box.getAttribute('data-index');
 
   modalContent.setAttribute('data-index', boxIndexNumber);
-
 }
+
+function changeBooksInfo(currBook, remove = false) {
+  if (!remove) {
+    checkBookStatus(currBook)
+  } else {
+    checkBookStatus(currBook, true)
+  }
+}
+
+function checkBookStatus(currBook, remove = false) {
+  console.log(currBook);
+  if (currBook.isRead || currBook.numPages === currBook.readPages) remove ? readedBooksCount-- : readedBooksCount++;
+
+  if (!currBook.isRead && currBook.readPages && currBook.readPages !== currBook.numPages) remove ? unreadedBooksCount-- : unreadedBooksCount++;
+
+  if (!currBook.isRead && !currBook.readPages) remove ? onMyList-- : onMyList++;
+
+  totalBooks = myLibrary.length;
+}
+
+function displayBooksInfo() {
+  readedBooksCountEl.textContent = readedBooksCount;
+  unreadedBooksCountEl.textContent = unreadedBooksCount
+  onMyListEl.textContent = onMyList;
+  totalBooksEl.textContent = totalBooks;
+}
+
+function initForm() {
+  removeTypingClasses();
+  inputNumberReadEl.closest('.input-box').classList.remove('hidden');
+  form.reset();
+}
+
+function removeTypingClasses() {
+  const inputNodeList = document.querySelectorAll('input');
+  const inputArray = Array.from(inputNodeList);
+
+  inputArray.forEach((inputEl) => inputEl.classList.remove('typing'));
+}
+
+
+
+updateForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  // Get input field values
+  const updatedBook = myLibrary[updateModal.dataset.index];
+
+  // Proveri ako je stavio status da je procitao i promeni num pages, da je to greska
+  if (updatedBook.isRead && (pagesInputUpdateEl.value !== updatedBook.numPages || readedInputUpdateEl.value !== updatedBook.readPages)) {
+    alert(`You can't set different read pages from number of pages, when book is readed`);
+    return
+  }
+
+  if (readedInputUpdateEl.value > pagesInputUpdateEl.value) {
+    alert(`You can't set more readed pages than actual number`);
+    return
+  }
+
+  changeBooksInfo(updatedBook, true);
+
+  updatedBook.author = authorInputUpdateEl.value;
+  updatedBook.title = titleInputUpdateEl.value;
+  updatedBook.numPages = pagesInputUpdateEl.value;
+  updatedBook.readPages = readedInputUpdateEl.value;
+
+  if (updatedBook.numPages === updatedBook.readPages) updatedBook.isRead = true;
+
+  modal.style.display = "none";
+  updateModal.style.display = "none";
+
+  displayBooks(myLibrary);
+
+  changeBooksInfo(updatedBook);
+  // Ovo ces da promenis kad budes stavi local storage
+  displayBooksInfo();
+})
+
+span.forEach(close => close.addEventListener('click', (e) => {
+  modal.style.display = "none";
+
+  setModalContentHidden();
+}))
+
+window.addEventListener('click', (event) => {
+  if (event.target == modal) {
+    modal.style.display = "none";
+
+    setModalContentHidden();
+  }
+})
+
+function setModalContentHidden() {
+  deleteModal.style.display = "none";
+  updateModal.style.display = "none";
+}
+
+btnCancel.addEventListener('click', (e) => {
+  modal.style.display = "none";
+  deleteModal.style.display = "none";
+})
+
+btnDelete.addEventListener('click', (e) => {
+  const boxIndexNumber = +deleteModal.dataset.index;
+  const box = myLibrary[boxIndexNumber];
+  console.log(box);
+  myLibrary = myLibrary.filter((book, index) => index !== boxIndexNumber);
+
+  displayBooks(myLibrary);
+
+  changeBooksInfo(box, true);
+
+  displayBooksInfo();
+
+  modal.style.display = "none";
+  deleteModal.style.display = "none";
+})
+
+
 
 
 
