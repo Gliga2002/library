@@ -1,22 +1,22 @@
 /* SIDEBAR */
 
 footer {
-  position:absolute;
-  bottom:0;
+  position: absolute;
+  bottom: 0;
   padding: 0 0 30px 0;
 }
 
 .input-box {
-  position:relative;
+  position: relative;
 }
 
 .sidebar-input {
-  width:100%;
+  width: 100%;
   padding: 15px 0 5px 0;
-  border:none;
+  border: none;
   background-color: var(--cappucino);
   border-bottom: 2px dotted var(--blue);
-  color:var(--blue);
+  color: var(--blue);
 }
 
 .sidebar-input:focus {
@@ -25,36 +25,35 @@ footer {
 }
 
 input[type="checkbox"] {
-  width:1.8rem;
+  width: 1.8rem;
   height: 1.8rem;
-  margin-right:5px;
+  margin-right: 5px;
 }
 
 .btn--form {
-  padding:1.8rem 2.2rem;
-  width:70%;
+  padding: 1.8rem 2.2rem;
+  width: 70%;
   text-transform: uppercase;
   /* letter-spacing: 0.2px; */
-  color:var(--white);
+  color: var(--white);
   background-color: var(--blue);
 }
 
 
 .input-box--text {
-  position:absolute;
-  top:14px;
-  left:0;
+  position: absolute;
+  top: 14px;
+  left: 0;
 }
 
-footer p {
-  font-size:1.5rem;
+.input.t footer p {
+  font-size: 1.5rem;
 }
-
 
 /* MAIN SECTION */
 
 
-.main-section--info p{
+.main-section--info p {
   text-transform: uppercase;
   font-size: 2rem;
 }
@@ -66,26 +65,26 @@ footer p {
 }
 
 .box {
-  position:relative;
+  position: relative;
   width: 250px;
-  height:90%;
-  padding:1rem 1rem 0rem 1rem;
+  height: 90%;
+  padding: 1rem 1rem 0rem 1rem;
   background-color: var(--blue);
-  color:var(--white);
+  color: var(--white);
   border: 2px solid var(--gray);
   box-shadow: 10px 5px 5px #e2e0e0;
-  justify-self:center;
+  justify-self: center;
   align-self: center;
 }
 
 .book {
-  padding:1rem;
+  padding: 1rem;
 }
 
 .num-pages {
-  position:absolute;
-  bottom:10px;
-  right:10px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
   color: var(--gray);
 }
 
@@ -94,14 +93,14 @@ footer p {
 /* ACTIVE CLASS JE CURRENT ACTIVE */
 
 .hidden {
-  display:none;
+  display: none;
 }
 
 /* COMPLETED */
 
 .completed .status {
   margin-top: 1rem;
-  color:var(--green);
+  color: var(--green);
 }
 
 
@@ -109,15 +108,15 @@ footer p {
 
 
 .loading {
-  width:100%;
+  width: 100%;
   background-color: white;
-  height:13px;
-  border:1px solid var(--gray);
+  height: 13px;
+  border: 1px solid var(--gray);
   overflow: hidden;
 }
 
 .fill {
-  height:inherit;
+  height: inherit;
   background-color: green;
 }
 
@@ -125,7 +124,7 @@ footer p {
 
 .on-list .status {
   margin-top: 1rem;
-  color:var(--orange);
+  color: var(--orange);
 }
 
 
@@ -136,43 +135,63 @@ span {
 }
 
 
-.typing span,
-.clicked span
- {
-  top:-20%;
+/* .typing span, */
+.typing:invalid+span,
+.typing:valid+span,
+.clicked span {
+  top: -20%;
   font-size: 1.2rem;
 }
 
+.typing:invalid {
+  border-bottom: 2px dotted rgb(214, 8, 8);
+}
 
+.typing:valid {
+  border-bottom: 2px dotted rgb(7, 200, 7);
+}
 
+.error {
+  color: rgb(214, 8, 8);
+}
 
 /* MODAL */
 
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.65); /* Black w/ opacity */
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.65);
+  /* Black w/ opacity */
 }
 
 .modal-content {
   /* display: none; */
-  position:relative;
+  position: relative;
   background-color: var(--full-white);
-  margin: 8% auto; /* 8% from the top and centered */
+  margin: 8% auto;
+  /* 8% from the top and centered */
   border: 2px solid #888;
-  width: 35%; /* Could be more or less, depending on screen size */
+  width: 35%;
+  /* Could be more or less, depending on screen size */
 }
 
 .btn--cancel {
   background-color: var(--full-white);
-  color:var(--blue);
+  color: var(--blue);
   font-size: 1.5rem;
   letter-spacing: 0.3px;
 
@@ -181,7 +200,7 @@ span {
 
 .btn--delete {
   background-color: var(--red);
-  color:var(--full-white);
+  color: var(--full-white);
   font-size: 1.5rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -192,25 +211,25 @@ span {
 }
 
 .update-modal {
-  display:none;
+  display: none;
 }
 
 .modal-content--heading {
   background-color: var(--blue);
-  color:var(--white);
-  padding:2rem;
+  color: var(--white);
+  padding: 2rem;
 }
 
 .modal-content--main {
-  color:var(--blue);
-  padding:1rem;
+  color: var(--blue);
+  padding: 1rem;
 }
 
 /* The Close Button */
 .close {
-  position:absolute;
-  right:1.5%;
-  top:2%;
+  position: absolute;
+  right: 1.5%;
+  top: 2%;
   color: var(--full-white);
   font-size: 28px;
   font-weight: bold;
@@ -229,11 +248,11 @@ span {
 }
 
 .modal-input {
-  width:100%;
+  width: 100%;
   padding: 1rem;
   background-color: var(--blue);
-  color:var(--full-white);
-  font-size:1.7rem;
+  color: var(--full-white);
+  font-size: 1.7rem;
 }
 
 .modal-input:focus {
@@ -242,9 +261,7 @@ span {
 
 .btn--edit {
   background-color: var(--cappucino);
-  border:1.8px solid var(--blue);
-  color:var(--blue);
+  border: 1.8px solid var(--blue);
+  color: var(--blue);
   letter-spacing: 0.8px;
 }
-
-

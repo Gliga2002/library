@@ -8,6 +8,7 @@ const inputNumberReadEl = document.querySelector("#readed-pages");
 const checkbox = document.querySelector('input[type="checkbox"]');
 
 
+
 const modal = document.getElementById("myModal");
 const span = document.querySelectorAll(".close");
 const deleteModal = document.querySelector('.delete-modal');
@@ -41,7 +42,7 @@ let totalBooks = 0;
 function Book(author, title, numPages, readPages = null, read = false) {
   this.author = author;
   this.title = title,
-  this.numPages = +numPages;
+    this.numPages = +numPages;
   this.readPages = +readPages;
   this.isRead = read;
 }
@@ -52,7 +53,7 @@ inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isRead
   // Debounce function to delay execution until the user stops typing
   function debounce(func, delay) {
     let timer;
-    return function(...args) {
+    return function (...args) {
       clearTimeout(timer);
       timer = setTimeout(() => {
         func.apply(this, args);
@@ -62,31 +63,50 @@ inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isRead
 
   function processInput() {
     const inputValue = inputElement.value;
+    const inputBoxEl = inputElement.closest('.input-box');
+    const errorMsgEl = inputBoxEl.querySelector('.error');
+
     console.log("Input value:", inputValue);
     // Perform your function's logic here
-    if(inputValue !== "") {
-          inputElement.closest('.input-box').classList.add('typing');
-        } else {
-          console.log('ovde')
-          inputElement.closest('.input-box').classList.remove('typing');
-        }
+    if (!inputElement.checkValidity()) {
+      showError(inputElement, errorMsgEl)
+    } else {
+      errorMsgEl.textContent = ""; // Reset the content of the message
+    }
+
+    if (inputValue !== "") {
+      inputElement.classList.add('typing');
+    } else {
+      inputElement.classList.remove('typing');
+    }
   }
   const debouncedProcessInput = debounce(processInput, 200); // Delay of 300 milliseconds
 
   inputElement.addEventListener("input", debouncedProcessInput);
 })
 
+function showError(typingInputEl, errorMsgEl) {
+  if (typingInputEl.validity.valueMissing) {
+    errorMsgEl.innerHTML = 'Please fill up this form.'
+  } else if (typingInputEl.validity.typeMismatch) {
+    errorMsgEl.innerHTML = 'Entered value needs to be text.'
+  } else if (typingInputEl.validity.tooShort) {
+    errorMsgEl.innerHTML = `You should enter at least ${typingInputEl.minLength} characters; you entered ${typingInputEl.value.length}.`;
+  } else if (typingInputEl.validity.rangeUnderflow) {
+    errorMsgEl.innerHTML = `You book should have at least ${typingInputEl.min} pages; your's have ${typingInputEl.value}.`
+  }
 
+}
 
 sidebar.addEventListener('click', (e) => {
   const inputBox = e.target.closest('.input-box');
-  if(!inputBox) {
-    
-    if(prevClickedBox)prevClickedBox.classList.remove('clicked');
+  if (!inputBox) {
+
+    if (prevClickedBox) prevClickedBox.classList.remove('clicked');
     return;
   };
- 
-  if(prevClickedBox) prevClickedBox.classList.remove('clicked');
+
+  if (prevClickedBox) prevClickedBox.classList.remove('clicked');
 
   inputBox.classList.add('clicked');
 
@@ -99,45 +119,42 @@ sidebar.addEventListener('click', (e) => {
 
 
 mainSection.addEventListener('click', (e) => {
-  if(prevClickedBox)prevClickedBox.classList.remove('clicked');
+  if (prevClickedBox) prevClickedBox.classList.remove('clicked');
 })
 
 
-form.addEventListener('submit', function(e) {
+form.addEventListener('submit', function (e) {
   e.preventDefault();
   try {
-    if(+this.readedPages.value > +this.numPages.value || +this.readedPages.value < 0 || +this.numPages <= 0 ) throw new Error("Invalid Inputs (Check pages input data)")
+    if (+this.readedPages.value > +this.numPages.value || +this.readedPages.value < 0 || +this.numPages <= 0) throw new Error("Invalid Inputs (Check pages input data)")
+
+    removeTypingClasses()
 
     const userInput = {
-      author:this.author.value,
-      title:this.title.value,
-      numPages:this.numPages.value,
+      author: this.author.value,
+      title: this.title.value,
+      numPages: this.numPages.value,
       readedPages: this.readedPages.value,
       isReaded: this.isReaded.checked
     }
-  
+
     addBookToLibrary(userInput);
 
     resetInputs();
 
   }
-  catch(err) {
-   alert(err);
+  catch (err) {
+    alert(err);
   }
 
 })
 
-checkbox.addEventListener('change', function(e) {
-  if(this.checked) {
-    inputNumberReadEl.value = "";
-    inputNumberReadEl.closest('.input-box').classList.add('hidden');
-  } else {
-    inputNumberReadEl.closest('.input-box').classList.remove('hidden');
-  }
-})
+function removeTypingClasses() {
+  const inputNodeList = document.querySelectorAll('input');
+  const inputArray = Array.from(inputNodeList);
 
-
-
+  inputArray.forEach((inputEl) => inputEl.classList.remove('typing'));
+}
 
 function addBookToLibrary(inputs) {
   const newBook = new Book(inputs.author, inputs.title, inputs.numPages, inputs.readedPages, inputs.isReaded);
@@ -151,6 +168,33 @@ function addBookToLibrary(inputs) {
   displayBooksInfo();
 }
 
+function resetInputs() {
+  inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputEl => {
+
+    inputEl.closest('.input-box').classList.remove('typing')
+  })
+
+  inputNumberReadEl.closest('.input-box').classList.remove('hidden');
+
+  form.reset();
+}
+
+
+
+checkbox.addEventListener('change', function (e) {
+  if (this.checked) {
+    inputNumberReadEl.value = "";
+    inputNumberReadEl.closest('.input-box').classList.add('hidden');
+  } else {
+    inputNumberReadEl.closest('.input-box').classList.remove('hidden');
+  }
+})
+
+
+
+
+
+
 
 function displayBooks(booksArray) {
 
@@ -158,7 +202,7 @@ function displayBooks(booksArray) {
   booksArray.forEach((book, index) => {
     let status = setStatus(book);
 
-   
+
     html += `
     <div class="box"  data-index="${index}">
       <div onclick="handleIconsClick(event)" class="icon-box flex space-between">
@@ -183,32 +227,32 @@ function displayBooks(booksArray) {
 
 
 
-updateForm.addEventListener('submit', function(e) {
+updateForm.addEventListener('submit', function (e) {
   e.preventDefault();
-   // Get input field values
-   const updatedBook = myLibrary[updateModal.dataset.index];
+  // Get input field values
+  const updatedBook = myLibrary[updateModal.dataset.index];
 
-   updatedBook.author = authorInputUpdateEl.value;
-   updatedBook.title = titleInputUpdateEl.value;
-   updatedBook.numPages = pagesInputUpdateEl.value;
-   updatedBook.readPages = readedInputUpdateEl.value;
+  updatedBook.author = authorInputUpdateEl.value;
+  updatedBook.title = titleInputUpdateEl.value;
+  updatedBook.numPages = pagesInputUpdateEl.value;
+  updatedBook.readPages = readedInputUpdateEl.value;
 
-   // Proveri ako je stavio status da je procitao i promeni num pages, da je to greska
-   if(updatedBook.isRead && updatedBook.numPages !== updatedBook.readPages) {
+  // Proveri ako je stavio status da je procitao i promeni num pages, da je to greska
+  if (updatedBook.isRead && updatedBook.numPages !== updatedBook.readPages) {
     alert(`You can't set different read pages from number of pages, when book is readed`);
     return
-   }
+  }
 
-   changeBooksInfo(updatedBook, true);
+  changeBooksInfo(updatedBook, true);
 
-   modal.style.display = "none";
-   updateModal.style.display = "none";
+  modal.style.display = "none";
+  updateModal.style.display = "none";
 
-   displayBooks(myLibrary);
+  displayBooks(myLibrary);
 
-   changeBooksInfo(updatedBook);
-   // Ovo ces da promenis kad budes stavi local storage
-   displayBooksInfo();
+  changeBooksInfo(updatedBook);
+  // Ovo ces da promenis kad budes stavi local storage
+  displayBooksInfo();
 
   console.log('SUBMITED');
 })
@@ -252,18 +296,18 @@ btnDelete.addEventListener('click', (e) => {
 })
 
 function setStatus(book) {
-  if(book.numPages === book.readPages || book.isRead) {
+  if (book.numPages === book.readPages || book.isRead) {
     return `
     <div class="status-div completed">
       <p class="status font-size--sm">Completed</p>
     </div>`
     //readPages da nema vrednost i da nije procitana
-  } else if(!book.readPages && !book.isRead) {
+  } else if (!book.readPages && !book.isRead) {
     return `
     <div class="status-div on-list">
       <p class="status font-size--sm">on my list!</p>
     </div>`
-  } else if(book.readPages && !book.isRead) {
+  } else if (book.readPages && !book.isRead) {
     // Dinamicki ga napravi
     return `
     <div class="status-div in-progress">
@@ -276,16 +320,7 @@ function setStatus(book) {
 }
 
 
-function resetInputs() {
-  inputsArray.filter(inputElement => inputElement.getAttribute('name') !== 'isReaded').forEach(inputEl => {
-  
-    inputEl.closest('.input-box').classList.remove('typing')
-  }) 
 
-  inputNumberReadEl.closest('.input-box').classList.remove('hidden');
-
-  form.reset();
-}
 
 
 function setModalContentHidden() {
@@ -293,23 +328,23 @@ function setModalContentHidden() {
   updateModal.style.display = "none";
 }
 
-function changeBooksInfo(currBook, remove=false) {
-  if(!remove) {
+function changeBooksInfo(currBook, remove = false) {
+  if (!remove) {
     checkBookStatus(currBook)
   } else {
     checkBookStatus(currBook, true)
   }
-  
+
 }
 
-function checkBookStatus(currBook, remove=false) {
-  if(currBook.isRead || currBook.numPages === currBook.readPages) remove ? readedBooksCount-- : readedBooksCount ++;
+function checkBookStatus(currBook, remove = false) {
+  if (currBook.isRead || currBook.numPages === currBook.readPages) remove ? readedBooksCount-- : readedBooksCount++;
 
-    if(!currBook.isRead && currBook.readPages && currBook.readPages !== currBook.numPages) remove ? unreadedBooksCount-- : unreadedBooksCount++;
+  if (!currBook.isRead && currBook.readPages && currBook.readPages !== currBook.numPages) remove ? unreadedBooksCount-- : unreadedBooksCount++;
 
-    if(!currBook.isRead && !currBook.readPages) remove ? onMyList-- : onMyList++;
+  if (!currBook.isRead && !currBook.readPages) remove ? onMyList-- : onMyList++;
 
-    totalBooks = myLibrary.length;
+  totalBooks = myLibrary.length;
 }
 
 
@@ -321,49 +356,49 @@ function displayBooksInfo() {
 }
 
 function handleIconsClick(e) {
-      if(e.target.closest('.fa-pencil')) {
-        displayModal(updateModal, e);
+  if (e.target.closest('.fa-pencil')) {
+    displayModal(updateModal, e);
 
-        const box = myLibrary[updateModal.dataset.index];
+    const box = myLibrary[updateModal.dataset.index];
 
-        fillInputValues(box);
-      }
-    
-      if(e.target.closest('.fa-check-double')) {
-        const box = e.target.closest('.box');
-        const completedBook = myLibrary[box.getAttribute('data-index')];
+    fillInputValues(box);
+  }
 
-        if(completedBook.isRead) return;
+  if (e.target.closest('.fa-check-double')) {
+    const box = e.target.closest('.box');
+    const completedBook = myLibrary[box.getAttribute('data-index')];
 
-        changeBooksInfo(completedBook, true);
+    if (completedBook.isRead) return;
 
-        completedBook.isRead = true;
-        completedBook.readPages = completedBook.numPages;
+    changeBooksInfo(completedBook, true);
 
-        box.lastElementChild.textContent = `(${completedBook.numPages} | ${completedBook.numPages} pages)`;
-        const book = box.children[1];
-        // remove current status
-        book.lastElementChild.style.display = "none";
-        // Create a new DOMParser instance
-        const parser = new DOMParser();
+    completedBook.isRead = true;
+    completedBook.readPages = completedBook.numPages;
 
-        // Parse the HTML string into a Document object
-        const doc = parser.parseFromString(setStatus(completedBook), 'text/html');
-        // Now you can work with the Document object as if it's a real HTML document
-        const divElement = doc.querySelector('.status-div');
+    box.lastElementChild.textContent = `(${completedBook.numPages} | ${completedBook.numPages} pages)`;
+    const book = box.children[1];
+    // remove current status
+    book.lastElementChild.style.display = "none";
+    // Create a new DOMParser instance
+    const parser = new DOMParser();
 
-        book.appendChild(divElement);
-         // Output: Hello, world!
+    // Parse the HTML string into a Document object
+    const doc = parser.parseFromString(setStatus(completedBook), 'text/html');
+    // Now you can work with the Document object as if it's a real HTML document
+    const divElement = doc.querySelector('.status-div');
 
-        changeBooksInfo(completedBook);
-        displayBooksInfo();
+    book.appendChild(divElement);
+    // Output: Hello, world!
 
-        
-      }
-    
-      if(e.target.closest('.fa-trash')) {
-        displayModal(deleteModal, e);
-      }
+    changeBooksInfo(completedBook);
+    displayBooksInfo();
+
+
+  }
+
+  if (e.target.closest('.fa-trash')) {
+    displayModal(deleteModal, e);
+  }
 
 }
 

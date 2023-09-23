@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
   <script defer src="https://kit.fontawesome.com/51148f5aa4.js" crossorigin="anonymous"></script>
   <script defer src="script.js"></script>
 </head>
+
 <body>
   <div class="container grid grid--2-cols">
 
@@ -19,100 +21,112 @@
           <h1 class="heading-primary">Library</h1>
         </header>
 
-          <form id="form-container" action="#" method="POST" class="flex flex--column gap--el">
-            <div class="input-box">
-              <input class="sidebar-input" name="title" type="text" required spellcheck="false" autocomplete="off"/>
-              <span class="input-box--text font-size--md">What is title of the book?</span>
-            </div>
-            <div class="input-box">
-              <input class="sidebar-input" name="author" type="text" required spellcheck="false" autocomplete="off"/>
-              <span class="input-box--text font-size--md">Who is the author of the book?</span>
-            </div>
-            <div class="input-box">
-              <input class="sidebar-input" name="numPages"id="num-pages" type="number" autocomplete="off" required />
-              <span class="input-box--text font-size--md" required>How many pages are in the book?</span>
-            </div>
-            <div class="input-box">
-              <input  class="sidebar-input readed-pages" id='readed-pages'name="readedPages" type="number" autocomplete="off"/>
-              <span class="input-box--text font-size--md">How many pages you readed?</span>
-            </div>
-            <div class="input-checkbox flex center--vert">
-              <input class="sidebar-input" name="isReaded"  type="checkbox" />
-              <span class="font-size--md">I have already read this book</span>
-            </div>
-            <button class="btn btn--form font-size--md" type="submit">Add a NEW book</button>
-          </form>
+        <form id="form-container" action="#" method="POST" class="flex flex--column gap--el">
+          <div class="input-box">
+            <input class="sidebar-input" name="title" type="text" required spellcheck="false" autocomplete="off"
+              minlength="5" />
+            <span class="input-box--text font-size--md">What is title of the book?</span>
+            <span class="error" aria-live="polite"></span>
+          </div>
+          <div class="input-box">
+            <input class="sidebar-input" name="author" type="text" required spellcheck="false" autocomplete="off"
+              minlength="5" />
+            <span class="input-box--text font-size--md">Who is the author of the book?</span>
+            <span class="error" aria-live="polite"></span>
+          </div>
+          <div class="input-box">
+            <input class="sidebar-input" name="numPages" id="num-pages" type="number" autocomplete="off" required
+              min="20" />
+            <span class="input-box--text font-size--md" required>How many pages are in the book?</span>
+            <span class="error" aria-live="polite"></span>
+          </div>
+          <div class="input-box">
+            <input class="sidebar-input readed-pages" id='readed-pages' name="readedPages" type="number"
+              autocomplete="off" />
+            <span class="input-box--text font-size--md">How many pages you readed?</span>
+          </div>
+          <div class="input-checkbox flex center--vert">
+            <input class="sidebar-input" name="isReaded" type="checkbox" />
+            <span class="font-size--md">I have already read this book</span>
+          </div>
+          <button class="btn btn--form font-size--md" type="submit">Add a NEW book</button>
+        </form>
 
-          <footer>
-            <p clas="font-size--md"><span><i class="fa-solid fa-circle-info"></i></span>
-              Info about project</p>
-            <p class="margin-top--sm font-size--md">Crafted by <a href="https://github.com/Gliga2002">Gliga2002</a> | <a href="https://github.com/Gliga2002/library">Source</a></p>
-          </footer>
-        </div>
+        <footer>
+          <p clas="font-size--md"><span><i class="fa-solid fa-circle-info"></i></span>
+            Info about project</p>
+          <p class="margin-top--sm font-size--md">Crafted by <a href="https://github.com/Gliga2002">Gliga2002</a> | <a
+              href="https://github.com/Gliga2002/library">Source</a></p>
+        </footer>
+      </div>
     </sidebar>
 
     <main class="main-section">
       <div class="main-section--info flex center gap--lg margin-bottom--md">
         <p>Books Read: <span id="readed-books-count">0</span></p>
-        <p>Books Unread: <span id="unreaded-books-count" >0</span></p>
+        <p>Books Unread: <span id="unreaded-books-count">0</span></p>
         <p>On my List: <span id="on-my-list">0</span></p>
         <p>Total Books: <span id="total-books">0</span></p>
       </div>
       <section class="grid main-section--container gap--sm">
- 
+
 
       </section>
     </main>
   </div>
 
   <!-- The Modal -->
-<div id="myModal" class="modal">
+  <div id="myModal" class="modal">
 
-  <!-- Modal content -->
-  <div class="modal-content delete-modal">
-    <div class="modal-content--heading  margin-bottom--sm">
-      <h2 class="heading-secondary">Remove Book</h2>
-      <span class="close">&times;</span>
-    </div>
+    <!-- Modal content -->
+    <div class="modal-content delete-modal">
+      <div class="modal-content--heading  margin-bottom--sm">
+        <h2 class="heading-secondary">Remove Book</h2>
+        <span class="close">&times;</span>
+      </div>
 
-    <div class="modal-content--main">
-      <p class="font-size--sm margin-bottom--lg">Are you sure you want to delete book from your library ?</p>
-      <div class="buttons flex center--vert flex-end">
-        <button class="btn btn--cancel">Cancel</button>
-        <button class="btn btn--delete margin-left--sm ">Delete</button>
+      <div class="modal-content--main">
+        <p class="font-size--sm margin-bottom--lg">Are you sure you want to delete book from your library ?</p>
+        <div class="buttons flex center--vert flex-end">
+          <button class="btn btn--cancel">Cancel</button>
+          <button class="btn btn--delete margin-left--sm ">Delete</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="modal-content update-modal">
-    <div class="modal-content--heading  margin-bottom--sm">
-      <h2 class="heading-secondary">Update Book</h2>
-      <span class="close">&times;</span>
+    <div class="modal-content update-modal">
+      <div class="modal-content--heading  margin-bottom--sm">
+        <h2 class="heading-secondary">Update Book</h2>
+        <span class="close">&times;</span>
+      </div>
+
+      <div class="modal-content--main ">
+        <form class="update-form flex flex--column center" action="">
+          <div class="input-box--update margin-bottom--md">
+            <label for="update-title" class="font-size--sm">Title</label>
+            <input id="update-title" class="modal-input" name="title" type="text" spellcheck="false"
+              autocomplete="off" />
+          </div>
+          <div class="input-box--update margin-bottom--md">
+            <label for="update-author" class="font-size--sm">Author</label>
+            <input id="update-author" class="modal-input" name="author" type="text" required spellcheck="false"
+              autocomplete="off" />
+          </div>
+          <div class="input-box--update margin-bottom--md">
+            <label for="update-num--pages" class="font-size--sm">Number of pages</label>
+            <input id="update-num--pages" class="modal-input" name="numPages" id="num-pages" type="number"
+              autocomplete="off" />
+          </div>
+          <div class="input-box--update margin-bottom--sm">
+            <label for="update-readed--pages" class="font-size--sm">Readed pages</label>
+            <input id="update-readed--pages" class="modal-input" name="readedPages" type="number" autocomplete="off" />
+          </div>
+          <button class="btn btn--edit" type="submit">Edit</button>
+        </form>
+      </div>
     </div>
 
-    <div class="modal-content--main ">
-      <form class="update-form flex flex--column center" action="">
-        <div class="input-box--update margin-bottom--md">
-          <label for="update-title" class="font-size--sm">Title</label>
-          <input id="update-title" class="modal-input" name="title" type="text"  spellcheck="false" autocomplete="off"/>
-        </div>
-        <div class="input-box--update margin-bottom--md">
-          <label for="update-author" class="font-size--sm">Author</label>
-          <input id="update-author" class="modal-input" name="author" type="text" required spellcheck="false" autocomplete="off"/>
-        </div>
-        <div class="input-box--update margin-bottom--md">
-          <label for="update-num--pages" class="font-size--sm">Number of pages</label>
-          <input id="update-num--pages" class="modal-input" name="numPages"id="num-pages" type="number" autocomplete="off"  />
-        </div>
-        <div class="input-box--update margin-bottom--sm">
-          <label for="update-readed--pages" class="font-size--sm">Readed pages</label>
-          <input id="update-readed--pages" class="modal-input" name="readedPages" type="number" autocomplete="off"/>
-        </div>
-        <button class="btn btn--edit" type="submit">Edit</button>
-      </form>
-    </div>
   </div>
-
-</div>
 </body>
+
 </html>
