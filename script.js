@@ -39,8 +39,8 @@ let totalBooks = 0;
 function Book(author, title, numPages, readPages = null, read = false) {
   this.author = author;
   this.title = title;
-  this.numPages = +numPages;
-  this.readPages = +readPages;
+  this.numPages = Number(numPages);
+  this.readPages = Number(readPages);
   this.isRead = read;
 }
 
@@ -169,12 +169,12 @@ function getInputs() {
     author: this.author.value,
     title: this.title.value,
     numPages: this.numPages.value,
-    readedPages: this.readedPages.value,
+    readPages: this.readedPages.value,
     isRead: this.isReaded.checked
   }
 
-  if (userInput.isRead) userInput.readedPages = userInput.numPages;
-  if (userInput.numPages === userInput.readedPages) userInput.isRead = true;
+  if (userInput.isRead) userInput.readPages = userInput.numPages;
+  if (userInput.numPages === userInput.readPages) userInput.isRead = true;
 
   console.log({ userInput });
 
@@ -182,9 +182,12 @@ function getInputs() {
 }
 
 function addBookToLibrary(inputs) {
-  const newBook = new Book(inputs.author, inputs.title, inputs.numPages, inputs.readedPages, inputs.isRead);
+  const newBook = new Book(inputs.author, inputs.title, inputs.numPages, inputs.readPages, inputs.isRead);
+  console.log(newBook)
 
   myLibrary.push(newBook);
+
+  console.log(myLibrary);
 
   displayBooks(myLibrary);
 
@@ -196,6 +199,7 @@ function addBookToLibrary(inputs) {
 function displayBooks(booksArray) {
   let html = '';
   booksArray.forEach((book, index) => {
+    console.log(book);
     let status = setStatus(book);
 
     html += `
@@ -220,13 +224,18 @@ function displayBooks(booksArray) {
 }
 
 function setStatus(book) {
+  console.log(book)
+  console.log(book.readPages)
+  console.log(book.isRead)
   if (book.numPages === book.readPages || book.isRead) {
     return `
     <div class="status-div completed">
       <p class="status font-size--sm">Completed</p>
     </div>`
     //readPages da nema vrednost i da nije procitana
+
   } else if (!book.readPages && !book.isRead) {
+
     return `
     <div class="status-div on-list">
       <p class="status font-size--sm">on my list!</p>
@@ -424,7 +433,19 @@ btnDelete.addEventListener('click', (e) => {
   deleteModal.style.display = "none";
 })
 
+window.addEventListener('load', (e) => {
+  const myLibraryLS = JSON.parse(localStorage.getItem('myLibrary'));
 
+  myLibraryLS.forEach((book) => {
+    console.log(book);
+    addBookToLibrary(book);
+  })
+
+})
+
+window.addEventListener("beforeunload", function (event) {
+  localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+});
 
 
 
